@@ -2,7 +2,7 @@
 
 侯岳岑的 GitHub Pages 網站目錄。收錄公開且已啟用 Pages 的專案，不含目錄本身；私人儲存庫不列入。
 
-正式網址：https://brianann2339.github.io/web-directory/
+正式網址：https://brianann2339.github.io/all/
 
 ## 本機預覽
 
