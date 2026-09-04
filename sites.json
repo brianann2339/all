@@ -1,9 +1,11 @@
 {
   "owner": "brianann2339",
-  "checkedAt": "2026-09-05T00:47:56+09:00",
+  "checkedAt": "2026-09-04T16:06:57+00:00",
   "sites": [
     {
       "repo": "dr_houyuehtseng",
+      "repositoryId": 1334431772,
+      "curated": true,
       "category": "personal",
       "title": "侯岳岑｜個人網站",
       "description": "急診醫師與臨床 AI 研究者的經歷、研究成果與分享。",
@@ -15,6 +17,8 @@
     },
     {
       "repo": "hou-tsai-law",
+      "repositoryId": 1343407277,
+      "curated": true,
       "category": "personal",
       "title": "侯明正・蔡青芬律師事務所",
       "description": "臺南府前路的律師事務所，介紹兩位律師與委任流程。",
@@ -26,6 +30,8 @@
     },
     {
       "repo": "kanda-myojin-wedding",
+      "repositoryId": 1342000170,
+      "curated": true,
       "category": "personal",
       "title": "神田明神｜婚禮網站",
       "description": "侯岳岑・莊家焮的神前式婚禮資訊。",
@@ -37,6 +43,8 @@
     },
     {
       "repo": "dashboard",
+      "repositoryId": 1218841182,
+      "curated": true,
       "category": "medical",
       "title": "急診戰情室",
       "description": "急診指標、來診量與待床趨勢的資訊看板。",
@@ -48,6 +56,8 @@
     },
     {
       "repo": "RADAR_history",
+      "repositoryId": 1343943842,
+      "curated": true,
       "category": "medical",
       "title": "急診戰情圖｜歷史回溯",
       "description": "2020–2024 年的急診戰情歷史回溯。",
@@ -59,6 +69,8 @@
     },
     {
       "repo": "dashboard_rule",
+      "repositoryId": 1233991605,
+      "curated": true,
       "category": "medical",
       "title": "戰情室｜資料與計算說明",
       "description": "戰情室的資料來源、關鍵指標與圖表計算方式。",
@@ -70,6 +82,8 @@
     },
     {
       "repo": "emt-p1-model-explorer-v3",
+      "repositoryId": 1346123275,
+      "curated": true,
       "category": "medical",
       "title": "EMT P1 互動模型總覽 v3",
       "description": "模型表現總覽、ROC／PR 曲線與評估指標。",
@@ -81,6 +95,8 @@
     },
     {
       "repo": "emt-p1-model-explorer-v2",
+      "repositoryId": 1336936585,
+      "curated": true,
       "category": "medical",
       "title": "EMT P1 互動模型總覽 v2",
       "description": "第二版模型總覽，保留獨立入口方便對照。",
@@ -92,6 +108,8 @@
     },
     {
       "repo": "emt-p1-model-explorer",
+      "repositoryId": 1296128407,
+      "curated": true,
       "category": "medical",
       "title": "EMT P1 互動模型總覽",
       "description": "模型總覽與評估曲線。",
@@ -103,6 +121,8 @@
     },
     {
       "repo": "fifth-freedom-flights",
+      "repositoryId": 1330268703,
+      "curated": true,
       "category": "life",
       "title": "全球第五航權航班查詢器",
       "description": "查詢第五航權航班，依航班方向篩選。",
@@ -114,6 +134,8 @@
     },
     {
       "repo": "award-search-2026-09",
+      "repositoryId": 1327473121,
+      "curated": true,
       "category": "life",
       "title": "東京 ⇄ 墨爾本｜機票查詢",
       "description": "2026 年 9 月的里程票與現金票方案總表。",
@@ -125,6 +147,8 @@
     },
     {
       "repo": "tokyo-michelin",
+      "repositoryId": 1290121331,
+      "curated": true,
       "category": "life",
       "title": "東京米其林 × Tabelog",
       "description": "東京米其林與 Tabelog 美食地圖。",
@@ -136,6 +160,8 @@
     },
     {
       "repo": "tw_difficult_restaurant",
+      "repositoryId": 1309151542,
+      "curated": true,
       "category": "life",
       "title": "台灣預約困難餐廳圖鑑",
       "description": "台灣預約困難餐廳的整理與索引。",
@@ -147,6 +173,8 @@
     },
     {
       "repo": "tokyo-rent-compare",
+      "repositoryId": 1335347714,
+      "curated": true,
       "category": "life",
       "title": "東京租屋比價",
       "description": "比較實質月成本、初期費用與租屋條件。",
@@ -158,6 +186,8 @@
     },
     {
       "repo": "NeuGlia",
+      "repositoryId": 676511199,
+      "curated": true,
       "category": "medical",
       "title": "NeuGlia",
       "description": "NeuGlia 團隊與研究介紹。",

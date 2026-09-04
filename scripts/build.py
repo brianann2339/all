@@ -3,6 +3,7 @@ import json
 import pathlib
 import shutil
 from datetime import datetime
+from zoneinfo import ZoneInfo
 from urllib.parse import urlparse
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -31,7 +32,7 @@ def render(data):
         raise ValueError("Site list must be nonempty and contain no duplicate repositories")
     if any(site["category"] not in {group[0] for group in GROUPS} for site in sites):
         raise ValueError("Unknown category")
-    checked = datetime.fromisoformat(data["checkedAt"]).strftime("%Y.%m.%d")
+    checked = datetime.fromisoformat(data["checkedAt"]).astimezone(ZoneInfo("Asia/Tokyo")).strftime("%Y.%m.%d %H:%M JST")
     nav, sections = [], []
     count = 0
     for group_id, name, description in GROUPS:
