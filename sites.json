@@ -1,0 +1,171 @@
+{
+  "owner": "brianann2339",
+  "checkedAt": "2026-09-05T00:47:56+09:00",
+  "sites": [
+    {
+      "repo": "dr_houyuehtseng",
+      "category": "personal",
+      "title": "侯岳岑｜個人網站",
+      "description": "急診醫師與臨床 AI 研究者的經歷、研究成果與分享。",
+      "url": "https://brianann2339.github.io/dr_houyuehtseng/",
+      "repository": "https://github.com/brianann2339/dr_houyuehtseng",
+      "status": 200,
+      "sourceTitle": "侯岳岑 Yueh-Tseng Hou｜急診醫師・臨床 AI 研究者",
+      "sourceDescription": "侯岳岑醫師個人品牌與研究成果網站"
+    },
+    {
+      "repo": "hou-tsai-law",
+      "category": "personal",
+      "title": "侯明正・蔡青芬律師事務所",
+      "description": "臺南府前路的律師事務所，介紹兩位律師與委任流程。",
+      "url": "https://brianann2339.github.io/hou-tsai-law/",
+      "repository": "https://github.com/brianann2339/hou-tsai-law",
+      "status": 200,
+      "sourceTitle": "臺南律師事務所｜侯明正律師事務所・蔡青芬律師事務所",
+      "sourceDescription": "侯明正律師事務所・蔡青芬律師事務所 官方網站（台南・府前路）"
+    },
+    {
+      "repo": "kanda-myojin-wedding",
+      "category": "personal",
+      "title": "神田明神｜婚禮網站",
+      "description": "侯岳岑・莊家焮的神前式婚禮資訊。",
+      "url": "https://brianann2339.github.io/kanda-myojin-wedding/",
+      "repository": "https://github.com/brianann2339/kanda-myojin-wedding",
+      "status": 200,
+      "sourceTitle": "侯岳岑・莊家焮｜神田明神 神前式",
+      "sourceDescription": "婚禮資訊網站（Vite + React + TypeScript，GitHub Pages）"
+    },
+    {
+      "repo": "dashboard",
+      "category": "medical",
+      "title": "急診戰情室",
+      "description": "急診指標、來診量與待床趨勢的資訊看板。",
+      "url": "https://brianann2339.github.io/dashboard/",
+      "repository": "https://github.com/brianann2339/dashboard",
+      "status": 200,
+      "sourceTitle": "急診戰情室 · TCH ER Command",
+      "sourceDescription": "ER dashboard"
+    },
+    {
+      "repo": "RADAR_history",
+      "category": "medical",
+      "title": "急診戰情圖｜歷史回溯",
+      "description": "2020–2024 年的急診戰情歷史回溯。",
+      "url": "https://brianann2339.github.io/RADAR_history/",
+      "repository": "https://github.com/brianann2339/RADAR_history",
+      "status": 200,
+      "sourceTitle": "急診戰情圖 · 歷史回溯 2020–2024",
+      "sourceDescription": null
+    },
+    {
+      "repo": "dashboard_rule",
+      "category": "medical",
+      "title": "戰情室｜資料與計算說明",
+      "description": "戰情室的資料來源、關鍵指標與圖表計算方式。",
+      "url": "https://brianann2339.github.io/dashboard_rule/",
+      "repository": "https://github.com/brianann2339/dashboard_rule",
+      "status": 200,
+      "sourceTitle": "戰情室資料解析與圖表計算說明 | dashboard_rule",
+      "sourceDescription": "rule"
+    },
+    {
+      "repo": "emt-p1-model-explorer-v3",
+      "category": "medical",
+      "title": "EMT P1 互動模型總覽 v3",
+      "description": "模型表現總覽、ROC／PR 曲線與評估指標。",
+      "url": "https://brianann2339.github.io/emt-p1-model-explorer-v3/",
+      "repository": "https://github.com/brianann2339/emt-p1-model-explorer-v3",
+      "status": 200,
+      "sourceTitle": "EMT P1 互動模型總覽 v3",
+      "sourceDescription": "Interactive specialty EMT P1 model explorer with validated aggregate metrics and QA checklist."
+    },
+    {
+      "repo": "emt-p1-model-explorer-v2",
+      "category": "medical",
+      "title": "EMT P1 互動模型總覽 v2",
+      "description": "第二版模型總覽，保留獨立入口方便對照。",
+      "url": "https://brianann2339.github.io/emt-p1-model-explorer-v2/",
+      "repository": "https://github.com/brianann2339/emt-p1-model-explorer-v2",
+      "status": 200,
+      "sourceTitle": "EMT P1 互動模型總覽",
+      "sourceDescription": null
+    },
+    {
+      "repo": "emt-p1-model-explorer",
+      "category": "medical",
+      "title": "EMT P1 互動模型總覽",
+      "description": "模型總覽與評估曲線。",
+      "url": "https://brianann2339.github.io/emt-p1-model-explorer/",
+      "repository": "https://github.com/brianann2339/emt-p1-model-explorer",
+      "status": 200,
+      "sourceTitle": "EMT P1 互動模型總覽",
+      "sourceDescription": "Interactive model explorer (EMT P1) — static site hosted on GitHub Pages"
+    },
+    {
+      "repo": "fifth-freedom-flights",
+      "category": "life",
+      "title": "全球第五航權航班查詢器",
+      "description": "查詢第五航權航班，依航班方向篩選。",
+      "url": "https://brianann2339.github.io/fifth-freedom-flights/",
+      "repository": "https://github.com/brianann2339/fifth-freedom-flights",
+      "status": 200,
+      "sourceTitle": "全球第五航權航班查詢器",
+      "sourceDescription": "全球第五航權航班查詢器"
+    },
+    {
+      "repo": "award-search-2026-09",
+      "category": "life",
+      "title": "東京 ⇄ 墨爾本｜機票查詢",
+      "description": "2026 年 9 月的里程票與現金票方案總表。",
+      "url": "https://brianann2339.github.io/award-search-2026-09/",
+      "repository": "https://github.com/brianann2339/award-search-2026-09",
+      "status": 200,
+      "sourceTitle": "東京 ⇄ 墨爾本 里程票查詢總表（2026/09）",
+      "sourceDescription": "東京 ⇄ 墨爾本 2026/09 里程票與現金票查詢總表"
+    },
+    {
+      "repo": "tokyo-michelin",
+      "category": "life",
+      "title": "東京米其林 × Tabelog",
+      "description": "東京米其林與 Tabelog 美食地圖。",
+      "url": "https://brianann2339.github.io/tokyo-michelin/",
+      "repository": "https://github.com/brianann2339/tokyo-michelin",
+      "status": 200,
+      "sourceTitle": "東京米其林 × Tabelog 美食地圖",
+      "sourceDescription": null
+    },
+    {
+      "repo": "tw_difficult_restaurant",
+      "category": "life",
+      "title": "台灣預約困難餐廳圖鑑",
+      "description": "台灣預約困難餐廳的整理與索引。",
+      "url": "https://brianann2339.github.io/tw_difficult_restaurant/",
+      "repository": "https://github.com/brianann2339/tw_difficult_restaurant",
+      "status": 200,
+      "sourceTitle": "台灣預約困難餐廳圖鑑",
+      "sourceDescription": null
+    },
+    {
+      "repo": "tokyo-rent-compare",
+      "category": "life",
+      "title": "東京租屋比價",
+      "description": "比較實質月成本、初期費用與租屋條件。",
+      "url": "https://brianann2339.github.io/tokyo-rent-compare/",
+      "repository": "https://github.com/brianann2339/tokyo-rent-compare",
+      "status": 200,
+      "sourceTitle": "東京租屋比價",
+      "sourceDescription": "東京租屋整合比價網：把分散在各家日本租屋網站的房源整合到同一把尺上比較——實質月成本、初期費用、禮金敷金、含不含水電、外國人可否承租。"
+    },
+    {
+      "repo": "NeuGlia",
+      "category": "medical",
+      "title": "NeuGlia",
+      "description": "NeuGlia 團隊與研究介紹。",
+      "url": "https://brianann2339.github.io/NeuGlia/neuglia/",
+      "repository": "https://github.com/brianann2339/NeuGlia",
+      "status": 200,
+      "sourceTitle": "Education Meeting HTML5 Template",
+      "sourceDescription": null
+    }
+  ]
+}
