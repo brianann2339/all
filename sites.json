@@ -1,6 +1,6 @@
 {
   "owner": "brianann2339",
-  "checkedAt": "2026-09-06T04:42:47+00:00",
+  "checkedAt": "2026-09-07T04:46:04+00:00",
   "sites": [
     {
       "repo": "dr_houyuehtseng",
@@ -25,7 +25,7 @@
       "url": "https://brianann2339.github.io/hou-tsai-law/",
       "repository": "https://github.com/brianann2339/hou-tsai-law",
       "status": 200,
-      "sourceTitle": "臺南律師事務所｜侯明正律師事務所・蔡青芬律師事務所",
+      "sourceTitle": "侯明正律師事務所・蔡青芬律師事務所｜台南府前路",
       "sourceDescription": "侯明正律師事務所・蔡青芬律師事務所 官方網站（台南・府前路）"
     },
     {
@@ -196,6 +196,32 @@
       "status": 200,
       "sourceTitle": "Education Meeting HTML5 Template",
       "sourceDescription": null
+    },
+    {
+      "repo": "hou-law",
+      "repositoryId": 1359369263,
+      "curated": false,
+      "category": "other",
+      "title": "臺南律師｜侯明正律師事務所",
+      "description": "侯明正律師事務所 官方網站（台南・府前路）",
+      "url": "https://brianann2339.github.io/hou-law/",
+      "repository": "https://github.com/brianann2339/hou-law",
+      "status": 200,
+      "sourceTitle": "臺南律師｜侯明正律師事務所",
+      "sourceDescription": "侯明正律師事務所 官方網站（台南・府前路）"
+    },
+    {
+      "repo": "tsai-law",
+      "repositoryId": 1359369316,
+      "curated": false,
+      "category": "other",
+      "title": "臺南律師｜蔡青芬律師事務所",
+      "description": "蔡青芬律師事務所 官方網站（台南・府前路）",
+      "url": "https://brianann2339.github.io/tsai-law/",
+      "repository": "https://github.com/brianann2339/tsai-law",
+      "status": 200,
+      "sourceTitle": "臺南律師｜蔡青芬律師事務所",
+      "sourceDescription": "蔡青芬律師事務所 官方網站（台南・府前路）"
     }
   ]
 }
