@@ -46,14 +46,24 @@ def render(data):
             title = escape(site["title"] or site["repo"])
             status = site["status"]
             available = isinstance(status, int) and 200 <= status < 400
-            badge = "" if available else '<span class="warning">連結待確認</span>'
-            label = "開啟網站" if available else "嘗試開啟"
+            if not available:
+                badge = '<span class="warning">連結待確認</span>'
+                label = "嘗試開啟"
+            elif site.get("accessRequired"):
+                badge = '<span class="warning">需登入</span>'
+                label = "前往登入"
+            else:
+                badge = ""
+                label = "開啟網站"
+            source_link = ""
+            if site.get("repository"):
+                source_link = f'<a class="source-link" href="{safe_url(site["repository"])}" target="_blank" rel="noopener noreferrer" aria-label="{title} 的 GitHub 原始碼（另開分頁）">GitHub 原始碼 ↗</a>'
             cards.append(f'''<article class="site-card">
               <div class="card-top"><span class="number">{count:02}</span>{badge}<span class="card-mark" aria-hidden="true">↗</span></div>
               <h3><a class="site-link" href="{safe_url(site['url'])}" target="_blank" rel="noopener noreferrer">{title}<span class="sr-only">（另開分頁）</span></a></h3>
               <p class="description">{escape(site['description'])}</p>
               <div class="card-bottom"><span class="repo-name">{escape(site['repo'])}</span><span class="open-label" aria-hidden="true">{label} ↗</span></div>
-              <a class="source-link" href="{safe_url(site['repository'])}" target="_blank" rel="noopener noreferrer" aria-label="{title} 的 GitHub 原始碼（另開分頁）">GitHub 原始碼 ↗</a>
+              {source_link}
             </article>''')
         sections.append(f'''<section class="collection" id="{group_id}" aria-labelledby="{group_id}-heading">
           <div class="section-heading"><div><h2 id="{group_id}-heading">{name}<span>{len(group):02}</span></h2><p>{description}</p></div></div>

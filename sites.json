@@ -1,6 +1,6 @@
 {
   "owner": "brianann2339",
-  "checkedAt": "2026-09-08T04:40:41+00:00",
+  "checkedAt": "2026-09-08T12:37:47+00:00",
   "sites": [
     {
       "repo": "dr_houyuehtseng",
@@ -234,6 +234,20 @@
       "repository": "https://github.com/brianann2339/ntua-art-timetable",
       "status": 200,
       "sourceTitle": "美術碩專修課盤",
+      "sourceDescription": null
+    },
+    {
+      "repo": "btch-er-ccc.pages.dev",
+      "sync": "manual",
+      "curated": true,
+      "category": "medical",
+      "title": "台北慈濟急診科教學資訊平台",
+      "description": "台北慈濟急診科教學資訊平台的受保護登入入口。",
+      "url": "https://btch-er-ccc.pages.dev/",
+      "repository": null,
+      "status": 200,
+      "accessRequired": true,
+      "sourceTitle": "Sign in ・ Cloudflare Access",
       "sourceDescription": null
     }
   ]

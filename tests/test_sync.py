@@ -56,6 +56,23 @@ class SyncTests(unittest.TestCase):
         self.assertEqual(len(result["sites"]), 1)
         self.assertIn("連結待確認", render(result))
 
+    def test_manual_external_site_survives_and_refreshes_status(self):
+        manual = {
+            "repo": "external.pages.dev", "sync": "manual", "curated": True, "category": "medical",
+            "title": "外部教學平台", "description": "需要登入。", "url": "https://external.pages.dev/",
+            "repository": None, "status": 200, "accessRequired": True, "sourceTitle": "登入", "sourceDescription": None,
+        }
+        self.data["sites"].append(manual)
+        result = synchronize(self.data, [repository("NeuGlia", 1)], lambda url: (403 if "external" in url else 200, "登入", ""))
+        external = result["sites"][-1]
+        self.assertEqual(external["repo"], "external.pages.dev")
+        self.assertEqual(external["status"], 403)
+        output = render(result)
+        before, after = output.split("外部教學平台", 1)
+        card = before.rsplit("<article", 1)[1] + after.split("</article>", 1)[0]
+        self.assertIn("連結待確認", card)
+        self.assertNotIn("GitHub 原始碼", card)
+
     def test_empty_result_preserves_input(self):
         before = copy.deepcopy(self.data)
         with self.assertRaisesRegex(ValueError, "previous directory was preserved"):

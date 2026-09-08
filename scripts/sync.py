@@ -74,9 +74,11 @@ def inspect_page(url):
 def synchronize(data, repositories, inspect=inspect_page):
     owner = data["owner"]
     directory = os.environ.get("GITHUB_REPOSITORY", f"{owner}/all").lower()
-    previous_by_name = {site["repo"]: site for site in data["sites"]}
-    previous_by_id = {site["repositoryId"]: site for site in data["sites"] if "repositoryId" in site}
-    order = {site["repo"]: index for index, site in enumerate(data["sites"])}
+    manual = [site for site in data["sites"] if site.get("sync") == "manual"]
+    automatic = [site for site in data["sites"] if site.get("sync") != "manual"]
+    previous_by_name = {site["repo"]: site for site in automatic}
+    previous_by_id = {site["repositoryId"]: site for site in automatic if "repositoryId" in site}
+    order = {site["repo"]: index for index, site in enumerate(automatic)}
     current = [repo for repo in repositories if repo["owner"]["login"].lower() == owner.lower()
                and repo.get("has_pages") is True and repo.get("private") is False
                and repo["full_name"].lower() != directory]
@@ -112,6 +114,12 @@ def synchronize(data, repositories, inspect=inspect_page):
         if status != 200:
             print(f"Link needs attention: {repo['name']} ({status})")
     entries.sort(key=lambda site: (order.get(previous_by_id.get(site["repositoryId"], {}).get("repo", site["repo"]), len(order)), site["repo"].lower()))
+    for site in manual:
+        status, title, _ = inspect(site["url"])
+        entry = dict(site)
+        entry["status"] = status
+        entry["sourceTitle"] = title or site.get("sourceTitle", "")
+        entries.append(entry)
     return {"owner": owner, "checkedAt": datetime.now(timezone.utc).isoformat(timespec="seconds"), "sites": entries}
 
 
@@ -122,7 +130,7 @@ def main():
     from build import render
     render(updated)
     path.write_text(json.dumps(updated, ensure_ascii=False, indent=2) + "\n")
-    print(f"Synced {len(updated['sites'])} public GitHub Pages sites")
+    print(f"Synced {len(updated['sites'])} directory sites")
 
 
 if __name__ == "__main__":
