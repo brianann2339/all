@@ -45,7 +45,7 @@ def render(data):
             count += 1
             title = escape(site["title"] or site["repo"])
             status = site["status"]
-            protected = site.get("accessRequired") and status in (200, 401, 403)
+            protected = site.get("accessRequired") and status in (200, 403)
             available = protected or isinstance(status, int) and 200 <= status < 400
             if not available:
                 badge = '<span class="warning">連結待確認</span>'
