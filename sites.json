@@ -1,6 +1,6 @@
 {
   "owner": "brianann2339",
-  "checkedAt": "2026-09-07T04:46:04+00:00",
+  "checkedAt": "2026-09-08T04:40:41+00:00",
   "sites": [
     {
       "repo": "dr_houyuehtseng",
@@ -222,6 +222,19 @@
       "status": 200,
       "sourceTitle": "臺南律師｜蔡青芬律師事務所",
       "sourceDescription": "蔡青芬律師事務所 官方網站（台南・府前路）"
+    },
+    {
+      "repo": "ntua-art-timetable",
+      "repositoryId": 1359953295,
+      "curated": false,
+      "category": "other",
+      "title": "美術碩專修課盤",
+      "description": "國立臺灣藝術大學美術學系碩士在職專班的畢業學分規劃工具：把課排進各學期，即時算出還差幾學分。",
+      "url": "https://brianann2339.github.io/ntua-art-timetable/",
+      "repository": "https://github.com/brianann2339/ntua-art-timetable",
+      "status": 200,
+      "sourceTitle": "美術碩專修課盤",
+      "sourceDescription": null
     }
   ]
 }
