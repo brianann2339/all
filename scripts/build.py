@@ -45,11 +45,12 @@ def render(data):
             count += 1
             title = escape(site["title"] or site["repo"])
             status = site["status"]
-            available = isinstance(status, int) and 200 <= status < 400
+            protected = site.get("accessRequired") and status in (200, 401, 403)
+            available = protected or isinstance(status, int) and 200 <= status < 400
             if not available:
                 badge = '<span class="warning">連結待確認</span>'
                 label = "嘗試開啟"
-            elif site.get("accessRequired"):
+            elif protected:
                 badge = '<span class="warning">需登入</span>'
                 label = "前往登入"
             else:

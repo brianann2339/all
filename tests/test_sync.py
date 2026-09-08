@@ -70,7 +70,7 @@ class SyncTests(unittest.TestCase):
         output = render(result)
         before, after = output.split("外部教學平台", 1)
         card = before.rsplit("<article", 1)[1] + after.split("</article>", 1)[0]
-        self.assertIn("連結待確認", card)
+        self.assertIn("需登入", card)
         self.assertNotIn("GitHub 原始碼", card)
 
     def test_empty_result_preserves_input(self):
