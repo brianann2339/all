@@ -1,6 +1,6 @@
 {
   "owner": "brianann2339",
-  "checkedAt": "2026-09-11T04:44:24+00:00",
+  "checkedAt": "2026-09-11T17:51:44+00:00",
   "sites": [
     {
       "repo": "dr_houyuehtseng",
@@ -248,6 +248,19 @@
       "status": 200,
       "accessRequired": true,
       "sourceTitle": "登入 - 台北慈濟醫院急診醫學部教學資訊平台",
+      "sourceDescription": null
+    },
+    {
+      "repo": "script.google.com",
+      "sync": "manual",
+      "curated": true,
+      "category": "medical",
+      "title": "急診戰情室（Google Apps Script）",
+      "description": "呈現急診總人數、待床／待 ICU、護病比、區域分布、床位佔用、趨勢與壅塞指標的即時戰情儀表板。",
+      "url": "https://script.google.com/macros/s/AKfycbzE4bzHa0SWlF4jVpItqAP-2PJfrmShgjtranAj4_04zsHqJuHBLlUXCkqdRXKY14dN_w/exec",
+      "repository": null,
+      "status": 200,
+      "sourceTitle": "急診戰情室",
       "sourceDescription": null
     }
   ]
