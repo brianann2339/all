@@ -1,6 +1,6 @@
 {
   "owner": "brianann2339",
-  "checkedAt": "2026-09-12T04:38:37+00:00",
+  "checkedAt": "2026-09-13T04:52:03+00:00",
   "sites": [
     {
       "repo": "dr_houyuehtseng",
@@ -235,6 +235,19 @@
       "status": 200,
       "sourceTitle": "美術碩專修課盤",
       "sourceDescription": null
+    },
+    {
+      "repo": "ccc-manual",
+      "repositoryId": 1367131201,
+      "curated": false,
+      "category": "other",
+      "title": "使用手冊｜急診教學資訊平台",
+      "description": "急診教學資訊平台圖文使用手冊：學員、教師、管理員與核心課程操作",
+      "url": "https://brianann2339.github.io/ccc-manual/",
+      "repository": "https://github.com/brianann2339/ccc-manual",
+      "status": 200,
+      "sourceTitle": "使用手冊｜急診教學資訊平台",
+      "sourceDescription": "急診教學資訊平台圖文使用手冊：學員、教師、管理員與核心課程操作"
     },
     {
       "repo": "btch-er-ccc.pages.dev",
