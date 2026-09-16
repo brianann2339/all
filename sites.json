@@ -1,6 +1,6 @@
 {
   "owner": "brianann2339",
-  "checkedAt": "2026-09-15T04:58:00+00:00",
+  "checkedAt": "2026-09-16T04:52:37+00:00",
   "sites": [
     {
       "repo": "dr_houyuehtseng",
@@ -248,6 +248,19 @@
       "status": 200,
       "sourceTitle": "使用手冊｜急診教學資訊平台",
       "sourceDescription": "急診教學資訊平台圖文使用手冊：學員、教師、管理員與核心課程操作"
+    },
+    {
+      "repo": "RADAR_history_v2",
+      "repositoryId": 1371951860,
+      "curated": false,
+      "category": "other",
+      "title": "急診戰情圖 · 歷史回溯 2020–2024",
+      "description": "急診戰情圖歷史回溯 v2 (2020-2024): EDWIN / NEDOCS / READI following the live 戰情室 formulas; aggregated outputs only",
+      "url": "https://brianann2339.github.io/RADAR_history_v2/",
+      "repository": "https://github.com/brianann2339/RADAR_history_v2",
+      "status": 200,
+      "sourceTitle": "急診戰情圖 · 歷史回溯 2020–2024",
+      "sourceDescription": "急診戰情圖歷史回溯 v2 (2020-2024): EDWIN / NEDOCS / READI following the live 戰情室 formulas; aggregated outputs only"
     },
     {
       "repo": "btch-er-ccc.pages.dev",
