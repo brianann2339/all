@@ -1,6 +1,7 @@
 import json
 import os
 import pathlib
+import re
 from datetime import datetime, timezone
 from html.parser import HTMLParser
 from urllib.error import HTTPError, URLError
@@ -8,6 +9,25 @@ from urllib.parse import quote
 from urllib.request import Request, urlopen
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
+# Keywords for guessing the category of uncurated sites; the category with the most hits wins.
+CATEGORY_KEYWORDS = {
+    "medical": ["急診", "醫", "病", "臨床", "護理", "戰情", "來診", "檢傷", "教學資訊平台",
+                "emt", "er", "ed", "nedocs", "edwin", "clinical", "medical", "medicine",
+                "hospital", "patient", "emergency", "triage", "radar"],
+    "personal": ["律師", "事務所", "婚禮", "個人網站", "履歷", "作品集", "wedding", "law", "lawyer",
+                 "portfolio", "resume", "cv"],
+    "life": ["航班", "機票", "航權", "里程", "餐廳", "美食", "米其林", "租屋", "旅行", "旅遊", "飯店",
+             "flight", "flights", "travel", "restaurant", "michelin", "tabelog", "rent", "hotel", "trip"],
+}
+
+
+def guess_category(*texts):
+    text = " ".join(value for value in texts if value).lower().replace("_", " ").replace("-", " ")
+    words = set(re.findall(r"[a-z0-9]+", text))
+    scores = {category: sum(keyword in words if keyword.isascii() else keyword in text for keyword in keywords)
+              for category, keywords in CATEGORY_KEYWORDS.items()}
+    best = max(scores, key=scores.get)
+    return best if scores[best] else "other"
 
 
 class PageMetadata(HTMLParser):
@@ -102,7 +122,8 @@ def synchronize(data, repositories, inspect=inspect_page):
             "repo": repo["name"],
             "repositoryId": repo["id"],
             "curated": curated,
-            "category": previous.get("category", "other"),
+            "category": previous["category"] if curated else guess_category(
+                repo["name"], source_title, repo.get("description"), description),
             "title": previous["title"] if curated else source_title or repo["name"],
             "description": previous["description"] if curated else repo.get("description") or description or "GitHub Pages 網站。",
             "url": url,

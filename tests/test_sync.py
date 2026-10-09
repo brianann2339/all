@@ -5,7 +5,7 @@ import unittest
 from unittest.mock import patch
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "scripts"))
-from sync import fetch_repositories, pages_url, synchronize
+from sync import fetch_repositories, guess_category, pages_url, synchronize
 from build import render
 
 
@@ -72,6 +72,29 @@ class SyncTests(unittest.TestCase):
         card = before.rsplit("<article", 1)[1] + after.split("</article>", 1)[0]
         self.assertIn("需登入", card)
         self.assertNotIn("GitHub 原始碼", card)
+
+    def test_new_site_category_is_guessed(self):
+        repos = [repository("NeuGlia", 1), repository("ed-forecast", 2, description="急診來診量預測"),
+                 repository("tainan-law", 3, description="律師事務所官方網站"),
+                 repository("osaka-trip", 4, description=None)]
+        result = synchronize(self.data, repos, lambda url: (200, "", ""))
+        categories = {site["repo"]: site["category"] for site in result["sites"]}
+        self.assertEqual(categories, {"NeuGlia": "medical", "ed-forecast": "medical",
+                                      "tainan-law": "personal", "osaka-trip": "life"})
+
+    def test_curated_category_is_not_guessed(self):
+        self.data["sites"][0]["category"] = "life"
+        result = synchronize(self.data, [repository("NeuGlia", 1, description="急診研究")], self.inspect)
+        self.assertEqual(result["sites"][0]["category"], "life")
+
+    def test_uncurated_category_follows_updated_description(self):
+        self.data["sites"][0].update(curated=False, category="other")
+        result = synchronize(self.data, [repository("NeuGlia", 1, description="Tokyo restaurant map")], self.inspect)
+        self.assertEqual(result["sites"][0]["category"], "life")
+
+    def test_english_keywords_match_whole_words(self):
+        self.assertEqual(guess_category("arrival_prediction", "ED arrivals forecast"), "medical")
+        self.assertEqual(guess_category("red-herring", "Ordered list editor"), "other")
 
     def test_empty_result_preserves_input(self):
         before = copy.deepcopy(self.data)

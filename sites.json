@@ -29,6 +29,32 @@
       "sourceDescription": "侯明正律師事務所・蔡青芬律師事務所 官方網站（台南・府前路）"
     },
     {
+      "repo": "hou-law",
+      "repositoryId": 1359369263,
+      "curated": true,
+      "category": "personal",
+      "title": "侯明正律師事務所",
+      "description": "臺南府前路，侯明正律師的事務所網站。",
+      "url": "https://brianann2339.github.io/hou-law/",
+      "repository": "https://github.com/brianann2339/hou-law",
+      "status": 200,
+      "sourceTitle": "臺南律師｜侯明正律師事務所",
+      "sourceDescription": "侯明正律師事務所 官方網站（台南・府前路）"
+    },
+    {
+      "repo": "tsai-law",
+      "repositoryId": 1359369316,
+      "curated": true,
+      "category": "personal",
+      "title": "蔡青芬律師事務所",
+      "description": "臺南府前路，蔡青芬律師的事務所網站。",
+      "url": "https://brianann2339.github.io/tsai-law/",
+      "repository": "https://github.com/brianann2339/tsai-law",
+      "status": 200,
+      "sourceTitle": "臺南律師｜蔡青芬律師事務所",
+      "sourceDescription": "蔡青芬律師事務所 官方網站（台南・府前路）"
+    },
+    {
       "repo": "kanda-myojin-wedding",
       "repositoryId": 1342000170,
       "curated": true,
@@ -55,6 +81,19 @@
       "sourceDescription": "ER dashboard"
     },
     {
+      "repo": "arrival_prediction",
+      "repositoryId": 1374879122,
+      "curated": true,
+      "category": "medical",
+      "title": "急診來診量預測",
+      "description": "每 5 分鐘更新的 1／8／24 小時來診量預測，附方法與驗證說明。",
+      "url": "https://brianann2339.github.io/arrival_prediction/",
+      "repository": "https://github.com/brianann2339/arrival_prediction",
+      "status": 200,
+      "sourceTitle": "急診來診量預測",
+      "sourceDescription": "ED arrivals forecast (1 / 8 / 24 h, updated every 5 minutes): method, model, features, validation, hardware"
+    },
+    {
       "repo": "RADAR_history",
       "repositoryId": 1343943842,
       "curated": true,
@@ -66,6 +105,19 @@
       "status": 200,
       "sourceTitle": "急診戰情圖 · 歷史回溯 2020–2024",
       "sourceDescription": null
+    },
+    {
+      "repo": "RADAR_history_v2",
+      "repositoryId": 1371951860,
+      "curated": true,
+      "category": "medical",
+      "title": "急診戰情圖｜歷史回溯 v2",
+      "description": "依戰情室現行公式重算 EDWIN、NEDOCS、READI，僅呈現彙總結果。",
+      "url": "https://brianann2339.github.io/RADAR_history_v2/",
+      "repository": "https://github.com/brianann2339/RADAR_history_v2",
+      "status": 200,
+      "sourceTitle": "急診戰情圖 · 歷史回溯 2020–2025",
+      "sourceDescription": "急診戰情圖歷史回溯 v2 (2020-2024): EDWIN / NEDOCS / READI following the live 戰情室 formulas; aggregated outputs only"
     },
     {
       "repo": "dashboard_rule",
@@ -198,30 +250,17 @@
       "sourceDescription": null
     },
     {
-      "repo": "hou-law",
-      "repositoryId": 1359369263,
-      "curated": false,
-      "category": "other",
-      "title": "臺南律師｜侯明正律師事務所",
-      "description": "侯明正律師事務所 官方網站（台南・府前路）",
-      "url": "https://brianann2339.github.io/hou-law/",
-      "repository": "https://github.com/brianann2339/hou-law",
+      "repo": "ccc-manual",
+      "repositoryId": 1367131201,
+      "curated": true,
+      "category": "medical",
+      "title": "急診教學資訊平台｜使用手冊",
+      "description": "學員、教師與管理員的圖文操作手冊，含核心課程。",
+      "url": "https://brianann2339.github.io/ccc-manual/",
+      "repository": "https://github.com/brianann2339/ccc-manual",
       "status": 200,
-      "sourceTitle": "臺南律師｜侯明正律師事務所",
-      "sourceDescription": "侯明正律師事務所 官方網站（台南・府前路）"
-    },
-    {
-      "repo": "tsai-law",
-      "repositoryId": 1359369316,
-      "curated": false,
-      "category": "other",
-      "title": "臺南律師｜蔡青芬律師事務所",
-      "description": "蔡青芬律師事務所 官方網站（台南・府前路）",
-      "url": "https://brianann2339.github.io/tsai-law/",
-      "repository": "https://github.com/brianann2339/tsai-law",
-      "status": 200,
-      "sourceTitle": "臺南律師｜蔡青芬律師事務所",
-      "sourceDescription": "蔡青芬律師事務所 官方網站（台南・府前路）"
+      "sourceTitle": "使用手冊｜急診教學資訊平台",
+      "sourceDescription": "急診教學資訊平台圖文使用手冊：學員、教師、管理員與核心課程操作"
     },
     {
       "repo": "ntua-art-timetable",
@@ -235,45 +274,6 @@
       "status": 200,
       "sourceTitle": "美術碩專修課盤",
       "sourceDescription": null
-    },
-    {
-      "repo": "ccc-manual",
-      "repositoryId": 1367131201,
-      "curated": false,
-      "category": "other",
-      "title": "使用手冊｜急診教學資訊平台",
-      "description": "急診教學資訊平台圖文使用手冊：學員、教師、管理員與核心課程操作",
-      "url": "https://brianann2339.github.io/ccc-manual/",
-      "repository": "https://github.com/brianann2339/ccc-manual",
-      "status": 200,
-      "sourceTitle": "使用手冊｜急診教學資訊平台",
-      "sourceDescription": "急診教學資訊平台圖文使用手冊：學員、教師、管理員與核心課程操作"
-    },
-    {
-      "repo": "RADAR_history_v2",
-      "repositoryId": 1371951860,
-      "curated": false,
-      "category": "other",
-      "title": "急診戰情圖 · 歷史回溯 2020–2025",
-      "description": "急診戰情圖歷史回溯 v2 (2020-2024): EDWIN / NEDOCS / READI following the live 戰情室 formulas; aggregated outputs only",
-      "url": "https://brianann2339.github.io/RADAR_history_v2/",
-      "repository": "https://github.com/brianann2339/RADAR_history_v2",
-      "status": 200,
-      "sourceTitle": "急診戰情圖 · 歷史回溯 2020–2025",
-      "sourceDescription": "急診戰情圖歷史回溯 v2 (2020-2024): EDWIN / NEDOCS / READI following the live 戰情室 formulas; aggregated outputs only"
-    },
-    {
-      "repo": "arrival_prediction",
-      "repositoryId": 1374879122,
-      "curated": false,
-      "category": "other",
-      "title": "急診來診量預測",
-      "description": "ED arrivals forecast (1 / 8 / 24 h, updated every 5 minutes): method, model, features, validation, hardware",
-      "url": "https://brianann2339.github.io/arrival_prediction/",
-      "repository": "https://github.com/brianann2339/arrival_prediction",
-      "status": 200,
-      "sourceTitle": "急診來診量預測",
-      "sourceDescription": "ED arrivals forecast (1 / 8 / 24 h, updated every 5 minutes): method, model, features, validation, hardware"
     },
     {
       "repo": "btch-er-ccc.pages.dev",
