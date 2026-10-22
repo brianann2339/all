@@ -1,6 +1,6 @@
 {
   "owner": "brianann2339",
-  "checkedAt": "2026-10-21T04:52:47+00:00",
+  "checkedAt": "2026-10-22T04:52:58+00:00",
   "sites": [
     {
       "repo": "dr_houyuehtseng",
@@ -89,7 +89,7 @@
       "description": "每 5 分鐘更新的 1／8／24 小時來診量預測，附方法與驗證說明。",
       "url": "https://brianann2339.github.io/arrival_prediction/",
       "repository": "https://github.com/brianann2339/arrival_prediction",
-      "status": 200,
+      "status": 503,
       "sourceTitle": "急診來診量預測",
       "sourceDescription": "ED arrivals forecast (1 / 8 / 24 h, updated every 5 minutes): method, model, features, validation, hardware"
     },
