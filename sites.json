@@ -1,6 +1,6 @@
 {
   "owner": "brianann2339",
-  "checkedAt": "2026-10-22T04:52:58+00:00",
+  "checkedAt": "2026-10-23T04:55:00+00:00",
   "sites": [
     {
       "repo": "dr_houyuehtseng",
@@ -89,7 +89,7 @@
       "description": "每 5 分鐘更新的 1／8／24 小時來診量預測，附方法與驗證說明。",
       "url": "https://brianann2339.github.io/arrival_prediction/",
       "repository": "https://github.com/brianann2339/arrival_prediction",
-      "status": 503,
+      "status": 200,
       "sourceTitle": "急診來診量預測",
       "sourceDescription": "ED arrivals forecast (1 / 8 / 24 h, updated every 5 minutes): method, model, features, validation, hardware"
     },
@@ -274,6 +274,19 @@
       "status": 200,
       "sourceTitle": "美術碩專修課盤",
       "sourceDescription": null
+    },
+    {
+      "repo": "clinic-voice-cards",
+      "repositoryId": 1429537320,
+      "curated": false,
+      "category": "other",
+      "title": "診間語音 · 點一下，替你說",
+      "description": "iPad-friendly Traditional Chinese voice cards with a deep male voice",
+      "url": "https://brianann2339.github.io/clinic-voice-cards/",
+      "repository": "https://github.com/brianann2339/clinic-voice-cards",
+      "status": 200,
+      "sourceTitle": "診間語音 · 點一下，替你說",
+      "sourceDescription": "iPad-friendly Traditional Chinese voice cards with a deep male voice"
     },
     {
       "repo": "btch-er-ccc.pages.dev",
