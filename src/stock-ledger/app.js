@@ -7,7 +7,8 @@ const seed=window.LedgerSeed || {id:'empty',entries:[],loans:[]};
 const key='cash-ledger-v1-'+String(seed.id||'default');
 const clone=x=>JSON.parse(JSON.stringify(x));
 const nf=(x,min=0,max=2)=>Number(x).toLocaleString('en-US',{minimumFractionDigits:min,maximumFractionDigits:max});
-const usd=(v,d=2)=>'US$'+nf(v,2,d), twd=v=>'NT$'+nf(v,0,2), qty=v=>nf(v,0,8);
+const usd=(v,d=2)=>(v<0?'−':'')+'US$'+nf(Math.abs(v),2,d);
+const exactUSD=v=>usd(v,6), twd=v=>(v<0?'−':'')+'NT$'+nf(Math.abs(v),0,4), qty=v=>nf(v,0,8);
 const signed=(v,fn)=>v===0 ? fn(0) : (v>0?'+':'−')+fn(Math.abs(v));
 const dateOk=d=>typeof d==='string'&&/^\d{4}-\d\d-\d\d$/.test(d)&&Number.isFinite(Date.parse(d))&&new Date(d+'T00:00:00Z').toISOString().slice(0,10)===d;
 const missing=v=>v===''||v==null;
@@ -15,7 +16,7 @@ const moneyTone=v=>v>0?'positive':v<0?'negative':'';
 const uid=()=>globalThis.crypto?.randomUUID?.() || 'r'+Date.now().toString(36)+Math.random().toString(36).slice(2);
 const isoToday=()=>new Date().toLocaleDateString('sv-SE');
 const schema={funding:['twd'],fx:['twd','usd'],buy:['ticker','qty','price','fee','gross'],sell:['ticker','qty','price','fee','gross'],cash:['usd'],adjustment:['ticker','qty','basis']};
-let tab='invest', filter='all', saveFailed=false, timer;
+let tab='invest', filter='money', exampleId='', saveFailed=false, timer;
 function normalize(raw){
  if(!raw || !Array.isArray(raw.entries)||!Array.isArray(raw.loans)||raw.entries.length+raw.loans.length>20000)throw Error('請選擇資金手帳匯出的 JSON 檔。');
  const ids=new Set();
@@ -24,7 +25,7 @@ function normalize(raw){
   if(!loan&&!Object.hasOwn(schema,e.type))throw Error('檔案包含未支援的交易類型。');
   const id=String(e.id??uid()); if(ids.has(id))throw Error('檔案中有重複的紀錄代碼。');ids.add(id);
   const out={id,date:e.date,note:String(e.note||'').slice(0,2000)};
-  if(!loan)out.type=e.type;
+  if(!loan){out.type=e.type;if(e.source)out.source=String(e.source).trim().slice(0,180);}
   if(e.status==='pending')out.status='pending';
   const keys=loan?['borrow','repay']:schema[e.type];
   for(const name of keys){
@@ -38,6 +39,7 @@ function normalize(raw){
   return out;
  }
  const next={id:String(raw.id||seed.id||'default').slice(0,120),title:String(raw.title||'').slice(0,100),entries:raw.entries.map(e=>row(e,false)),loans:raw.loans.map(e=>row(e,true))};
+ if(raw.reconciliationNote)next.reconciliationNote=String(raw.reconciliationNote).slice(0,2000);
  if(!missing(raw.referenceCashUSD)&&Number.isFinite(Number(raw.referenceCashUSD))){
   next.referenceCashUSD=Number(raw.referenceCashUSD);
   if(dateOk(raw.referenceDate))next.referenceDate=raw.referenceDate;
@@ -45,11 +47,22 @@ function normalize(raw){
  return next;
 }
 let state=normalize(seed), data;
-try{const stored=localStorage.getItem(key);if(stored)state=normalize(JSON.parse(stored));}catch(e){saveFailed=true;}
+try{const stored=localStorage.getItem(key);if(stored){
+ const saved=JSON.parse(stored);
+ if (saved.id===seed.id && Array.isArray(saved.entries)) {
+  if(!saved.reconciliationNote && seed.reconciliationNote)saved.reconciliationNote=seed.reconciliationNote;
+  const initial=new Map(seed.entries.map(e=>[e.id,e]));
+  for(const e of saved.entries){
+   const original=initial.get(e.id);
+   if(!Object.hasOwn(e,'source') && original?.source && e.type===original.type && e.date===original.date && e.ticker===original.ticker )e.source=original.source;
+  }
+ }
+ state=normalize(saved);
+}}catch(e){saveFailed=true;}
 function save(){try{localStorage.setItem(key,JSON.stringify(state));saveFailed=false;}catch(e){saveFailed=true;}}
 function toast(s){$('toast').textContent=s;clearTimeout(timer);timer=setTimeout(()=>$('toast').textContent='',3600);}
 function displayStatus(){$('save-status').textContent=saveFailed?'此瀏覽器未能儲存':'儲存在此裝置';}
-function replaceState(raw){const next=normalize(raw);state=next;save();tab='invest';filter='all';if($('panel').open)$('panel').close();render();}
+function replaceState(raw){const next=normalize(raw);state=next;save();tab='invest';filter='money';exampleId='';if($('panel').open)$('panel').close();render();}
 window.LedgerUI={getState:()=>clone(state),importState:replaceState,hasLocalChanges:()=>JSON.stringify(state)!==JSON.stringify(normalize(seed))};
 function badge(type){return '<span class="pill '+esc(type)+'">'+esc(labels[type]||type)+'</span>';}
 function card(label,value,desc,sym,dark=false,extra=''){return '<article class="card'+(dark?' dark':'')+'"><div class="card-top"><span class="sym" aria-hidden="true">'+sym+'</span><h2>'+label+'</h2></div><div class="big">'+esc(value)+'</div><p>'+esc(desc)+'</p>'+extra+'</article>';}
@@ -57,8 +70,81 @@ function cell(v,label,cls=''){return '<span class="num '+cls+'"><span class="mob
 function detailLines(pairs){return '<div class="detail-grid">'+pairs.map(([a,b])=>'<div><span>'+esc(a)+'</span><b>'+esc(b)+'</b></div>').join('')+'</div>';}
 const noRows='<div class="empty">目前沒有紀錄。</div>';
 function latestDate(rows){return rows.length?rows[rows.length-1].entry.date:'尚無紀錄';}
+function cashRoute(e){
+ const recorded=e.source?.trim();
+ let route;
+ switch(e.type){
+  case 'funding': return recorded||e.note||'外部投入台幣，來源未填';
+  case 'fx': route='台幣現金 → 換成美元現金'; break;
+  case 'buy': route='美元現金 → 買入 '+e.ticker+' '+qty(e.qty)+' 股'; break;
+  case 'sell': route='賣出 '+e.ticker+' '+qty(e.qty)+' 股 → 美元現金'; break;
+  case 'adjustment': route='補登 '+e.ticker+' '+qty(e.qty)+' 股，只有股數變動'; break;
+  case 'cash': return recorded||(e.status==='pending'?'美元差額，來源待查':e.note||(e.usd>0?'外部美元入帳，來源未填':'美元現金支出，去向未填'));
+  default: return recorded||'';
+ }
+ return recorded||route;
+}
+function amounts(rows,type,currency){
+ return rows.filter(r=>r.entry.type===type).reduce((total,r)=>total+r[currency],0);
+}
+function wallet(title,amount,items,format,dark){
+ const parts=items.map(([label,value])=>'<div><dt>'+esc(label)+'</dt><dd>'+signed(value,format)+'</dd></div>').join('');
+ return '<article class="wallet'+(dark?' wallet-us':'')+'"><h2>'+title+'</h2><b class="wallet-total">'+format(amount)+'</b><dl>'+parts+'</dl></article>';
+}
+function equation(prev,delta,total,fmt){
+ return fmt(prev)+(delta<0?' − ':' + ')+fmt(Math.abs(delta))+' = '+fmt(total);
+}
+function saleTrial(r,price){
+ const e=r.entry, proceeds=e.qty*price-(e.fee||0);
+ const result=r.cashUSD-r.deltaUSD+proceeds;
+ const profit=r.realized==null?'獲利等成本補齊後才能計算。':'這筆損益為 '+signed(proceeds-(r.deltaUSD-r.realized),exactUSD)+'。';
+ return '賣出淨收款 '+exactUSD(proceeds)+'。當天賣完會剩 '+exactUSD(result)+'、'+twd(r.cashTWD)+'。'+profit;
+}
+function exampleCalculation(r){
+ if(!r)return '';
+ const e=r.entry, beforeUSD=r.cashUSD-r.deltaUSD, beforeTWD=r.cashTWD-r.deltaTWD;
+ const text=[cashRoute(e)];
+ if(e.status==='pending')text.push('尚待確認，這筆暫未計入現金。');
+ else if(e.type==='sell'&&r.realized!=null){
+  const cost=r.deltaUSD-r.realized;
+  text.push('賣出淨收款 '+exactUSD(r.deltaUSD)+' ＝ 成本 '+exactUSD(cost)+(r.realized<0?' − 虧損 ':' ＋ 獲利 ')+exactUSD(Math.abs(r.realized))+'。全額回到美元現金。');
+ }else if(e.type==='sell')text.push('賣出淨收款 '+exactUSD(r.deltaUSD)+' 全額回到美元現金。賣出的股數或成本還需補齊，這筆獲利待確認。');
+ else if(e.type==='buy')text.push('這次買入用掉 '+exactUSD(-r.deltaUSD)+'，已含登記的費用。');
+ else if(e.type==='fx')text.push('這次換出 '+twd(e.twd)+'，收到 '+exactUSD(e.usd)+'。');
+ else if(e.type==='funding')text.push('這筆投入的 '+twd(r.deltaTWD)+' 先放進台幣現金。');
+ else if(e.type==='adjustment')text.push('這筆補記持股。如果當時另有付錢，請依成交單改登買入。');
+ if(r.cashUSD<-.000001&&r.deltaUSD<0)text.push('扣款後少了 '+exactUSD(-r.cashUSD)+'。請核對更早的入金、換匯或交易金額。');
+ const saleControl=e.type==='sell'&&e.status!=='pending'?'<details class="trial"><summary>換個賣價試算</summary><label>假設每股賣價（美元）<input type="number" min="0" step="any" inputmode="decimal" id="trial-price" placeholder="'+esc(qty(e.price))+'"></label><p id="trial-result" aria-live="polite">沿用 '+esc(qty(e.qty))+' 股與原手續費，只試算這筆交易。</p></details>':'';
+ return '<div class="worked-copy">'+text.map(t=>'<p>'+esc(t)+'</p>').join('')+'</div><dl class="worked-math"><div><dt>台幣</dt><dd>'+esc(equation(beforeTWD,r.deltaTWD,r.cashTWD,twd))+'</dd></div><div><dt>美元</dt><dd>'+esc(equation(beforeUSD,r.deltaUSD,r.cashUSD,exactUSD))+'</dd></div></dl>'+saleControl;
+}
+function examplePanel(){
+ if(!data.trace.length)return '';
+ const r=data.trace.find(t=>t.entry.id===exampleId)||data.trace.find(t=>t.entry.type==='sell'&&t.realized!=null)||data.trace[0];
+ const options=data.trace.map(t=>{
+  const e=t.entry;
+  return '<option value="'+esc(e.id)+'"'+(r===t?' selected':'')+'>'+esc(e.date+'　'+(labels[e.type]||'')+(e.ticker?' '+e.ticker:''))+'</option>';
+ }).join('');
+ return '<section class="worked"><div class="worked-top"><h2>挑一筆算給我看</h2><select id="example-transaction" aria-label="選一筆交易看計算">'+options+'</select></div><div id="example-result" aria-live="polite">'+exampleCalculation(r)+'</div></section>';
+}
+function trailRow(r){
+ const e=r.entry;
+ const change=(delta,fmt)=>delta===0?'無變動':signed(delta,fmt);
+ const column=(unit,delta,total,fmt)=>'<span class="wallet-cell"><span>'+unit+'增減</span><b class="'+moneyTone(delta)+'">'+change(delta,fmt)+'</b><span>剩下</span><strong>'+fmt(total)+'</strong></span>';
+ let extra='';
+ if(e.status==='pending')extra='待核對 '+(e.type==='cash'?signed(e.usd,exactUSD):'')+'，暫未計入。';
+ else if(r.cashUSD<-.000001&&r.deltaUSD<0)extra='這筆付款後短少 '+exactUSD(-r.cashUSD)+'。';
+ else if(e.type==='sell')extra=r.realized==null?'賣出收款已計入，獲利待確認。':'收回成本 '+exactUSD(r.deltaUSD-r.realized)+'，'+(r.realized<0?'虧損 ':'獲利 ')+exactUSD(Math.abs(r.realized))+'。';
+ return '<button class="cash-row" data-entry="'+esc(e.id)+'"><span class="flow-id"><small>'+esc(e.date)+'</small><span>'+badge(e.type)+(e.ticker?' <b>'+esc(e.ticker)+'</b>':'')+'</span></span><span class="flow-route">'+esc(cashRoute(e))+(extra?'<small>'+esc(extra)+'</small>':'')+'</span>'+column('台幣',r.deltaTWD,r.cashTWD,twd)+column('美元',r.deltaUSD,r.cashUSD,exactUSD)+'</button>';
+}
 function portfolio(){
- let h='<div class="cards">'+card('可用美元',usd(data.cashUSD),'最後一筆交易後的餘額','$',true)+card('台幣現金',twd(data.cashTWD),'保留台幣，尚未換匯','元')+card('已確認買賣損益',signed(data.realizedKnown,usd),'已賣出且成本完整的交易','∑',false,data.unknownSales?'<span class="flag">'+data.unknownSales+' 筆損益待確認</span>':'')+'</div>';
+ const rows=data.trace;
+ const usdItems=[['換匯收到',amounts(rows,'fx','deltaUSD')],['賣股票收回（含本金）',amounts(rows,'sell','deltaUSD')],['買股票付出',amounts(rows,'buy','deltaUSD')]];
+ const cashRows=rows.filter(r=>r.entry.type==='cash');
+ const inUSD=cashRows.reduce((sum,r)=>sum+Math.max(0,r.deltaUSD),0);
+ const outUSD=cashRows.reduce((sum,r)=>sum+Math.min(0,r.deltaUSD),0);
+ if(inUSD)usdItems.push(['其他美元收入',inUSD]);if(outUSD)usdItems.push(['其他美元支出',outUSD]);
+ let h='<div class="wallets">'+wallet('美元現金',data.cashUSD,usdItems,exactUSD,true)+wallet('台幣現金',data.cashTWD,[['投入的台幣',amounts(rows,'funding','deltaTWD')],['換成美元用掉',amounts(rows,'fx','deltaTWD')]],twd,false)+'</div>';
+ h+=examplePanel();
  const hasRef=state.referenceCashUSD!=null;
  const cutoff=hasRef&&state.referenceDate?state.referenceDate:null;
  const asof=cutoff?data.trace.filter(r=>r.entry.date<=cutoff):data.trace;
@@ -71,31 +157,32 @@ function portfolio(){
    const diff=+(state.referenceCashUSD-actual).toFixed(6);
    h+='<div class="compare"><div><span>原表美元餘額</span><b>'+usd(state.referenceCashUSD)+'</b></div><div><span>依流水帳重算</span><b>'+usd(actual)+'</b></div><div><span>'+(Math.abs(diff)<.005?'餘額相符':diff>0?'原表多出':'原表少了')+'</span><b>'+usd(Math.abs(diff))+'</b></div></div>';
   }
+  if(state.reconciliationNote)h+='<p class="ref-note">'+esc(state.reconciliationNote)+'</p>';
   if(pending.length){
-   h+='<div class="whatif">'+pending.map(r=>'<label><input type="checkbox" data-scenario="'+esc(r.entry.id)+'"> 試算這筆入帳 <strong>'+signed(r.entry.usd,usd)+'</strong>'+(pending.length>1?'（'+esc(r.entry.date)+'）':'')+'</label>').join('')+'<p id="scenario-result" aria-live="polite">勾選可查看試算餘額，帳本會保留原值。</p></div>';
+   h+='<div class="whatif">'+pending.map(r=>'<label><input type="checkbox" data-scenario="'+esc(r.entry.id)+'"> 假設這筆是額外美元入帳 <strong>'+signed(r.entry.usd,usd)+'</strong>'+(pending.length>1?'（'+esc(r.entry.date)+'）':'')+'</label>').join('')+'<p id="scenario-result" aria-live="polite">勾選可查看試算餘額，帳本會保留原值。</p></div>';
   }
   if(traceIssues.length)h+='<details class="reconcile"><summary>查看待核對的紀錄</summary><ul>'+traceIssues.map(r=>'<li>'+esc(r.entry.date+' '+(r.entry.ticker||labels[r.entry.type])+'：'+r.issues.join('；'))+'</li>').join('')+'</ul></details>';
   h+='</section>';
  }
- h+='<section class="box space"><div class="section-head"><h2>目前持股</h2><small>'+data.holdings.length+' 檔</small></div>';
- h+=data.holdings.length?'<div class="positions">'+data.holdings.map(p=>'<div class="pos"><div aria-hidden="true" class="pos-abbr">'+esc(p.ticker.slice(0,2))+'</div><div><strong>'+esc(p.ticker)+'</strong><small>'+(p.basis==null?'成本待確認':'帳面成本 '+esc(usd(p.basis)))+'</small></div><span class="qty">'+esc(qty(p.qty))+' 股</span></div>').join('')+'</div>':'<p class="fine">目前沒有持股。</p>';
- h+='</section><section class="box ledger space"><div class="ledger-tools"><div><h2>交易流水帳</h2><p>由新到舊，點交易可看計算過程。</p></div><select id="filter" aria-label="篩選交易類型"><option value="all">全部類型</option>'+Object.entries(labels).map(([v,t])=>'<option value="'+v+'"'+(filter===v?' selected':'')+'>'+t+'</option>').join('')+'</select></div>';
- h+='<div class="ledger-cols" aria-hidden="true"><span>日期</span><span>交易項目</span><span class="right">美元增減</span><span class="right">交易後美元</span><span class="right">買賣損益</span><span></span></div>';
- const visible=data.trace.filter(r=>filter==='all'||r.entry.type===filter).reverse();
- h+=visible.map(r=>{const e=r.entry,sale=e.type==='sell'&&e.status!=='pending';return '<button class="ledger-row" data-entry="'+esc(e.id)+'"><span class="row-date">'+esc(e.date)+'</span><span class="title-cell">'+badge(e.type)+(e.ticker?'<strong>'+esc(e.ticker)+'</strong>':'')+(e.status==='pending'?'<small class="hold">待確認</small>':'')+'</span>'+cell(signed(r.deltaUSD,usd),'美元增減',moneyTone(r.deltaUSD))+cell(usd(r.cashUSD),'交易後美元')+cell(sale?(r.realized==null?'待確認':signed(r.realized,usd)):'—','買賣損益',r.realized==null&&sale?'hold':moneyTone(r.realized))+'<span class="chev" aria-hidden="true">›</span></button>';}).join('')||noRows;
+ h+='<section class="box ledger space"><div class="ledger-tools"><div><h2>現金流水帳</h2><p>從第一筆開始，看每筆之後還有多少現金。點選可看金額與來源。</p></div><select id="filter" aria-label="篩選交易類型"><option value="money"'+(filter==='money'?' selected':'')+'>只看現金往來</option><option value="all"'+(filter==='all'?' selected':'')+'>全部紀錄（含待核對、股數調整）</option>'+Object.entries(labels).map(([v,t])=>'<option value="'+v+'"'+(filter===v?' selected':'')+'>'+t+'</option>').join('')+'</select></div>';
+ const visible=rows.filter(r=>filter==='money'?r.deltaUSD!==0||r.deltaTWD!==0:filter==='all'||r.entry.type===filter);
+ h+=(visible.map(trailRow).join('')||noRows)+'</section>';
+ h+='<section class="box space"><div class="section-head"><h2>股票部位</h2><small>與現金分開計算</small></div>';
+ h+=data.holdings.length?'<div class="positions">'+data.holdings.map(p=>'<div class="pos"><div aria-hidden="true" class="pos-abbr">'+esc(p.ticker.slice(0,2))+'</div><div><strong>'+esc(p.ticker)+'</strong><small>'+(p.basis==null?'成本待確認':'投入成本 '+esc(exactUSD(p.basis)))+'</small></div><span class="qty">'+esc(qty(p.qty))+' 股</span></div>').join('')+'</div>':'<p class="fine">目前沒有持股。</p>';
+ h+='<p class="profit-foot">已能核算的賣出損益合計 <b>'+signed(data.realizedKnown,exactUSD)+'</b>。'+(data.unknownSales?'另外 '+data.unknownSales+' 筆賣出的成本待確認。':'')+'</p>';
  return h+'</section>';
 }
 function loanView(){
  const borrowed=state.loans.reduce((a,e)=>a+(e.borrow||0),0),paid=state.loans.reduce((a,e)=>a+(e.repay||0),0);
  let h='<div class="cards">'+card('目前尚欠',twd(data.loanBalance),'截至最近一筆借還款','元',true)+card('累計借入',twd(borrowed),'所有借款的合計','入')+card('累計已還',twd(paid),'所有還款的合計','還')+'</div>';
- h+='<section class="box ledger space"><div class="ledger-tools"><div><h2>借還款紀錄</h2><p>用台幣記帳，與投資帳本分開計算。</p></div></div><div class="ledger-cols loan-cols" aria-hidden="true"><span>日期</span><span class="right">借入</span><span class="right">已還</span><span class="right">尚欠</span><span></span></div>';
+ h+='<section class="box ledger space"><div class="ledger-tools"><div><h2>借還款紀錄</h2><p>這裡記錄家人之間的借債。若借款真的匯入投資帳戶，請在投資帳本另登台幣入金。</p></div></div><div class="ledger-cols loan-cols" aria-hidden="true"><span>日期</span><span class="right">借入</span><span class="right">已還</span><span class="right">尚欠</span><span></span></div>';
  h+=data.loanTrace.slice().reverse().map(r=>'<button class="ledger-row loan-row" data-loan="'+esc(r.entry.id)+'"><span class="row-date">'+esc(r.entry.date)+'</span>'+cell(twd(r.entry.borrow||0),'借入')+cell(twd(r.entry.repay||0),'已還')+cell(twd(r.balance),'尚欠',r.balance<0?'negative':'')+'<span class="chev" aria-hidden="true">›</span></button>').join('')||noRows;
  return h+'</section>';
 }
 function render(){
  data=LedgerEngine.calculate(state); const invest=tab==='invest';
  $('invest-tab').setAttribute('aria-pressed',String(invest));$('loans-tab').setAttribute('aria-pressed',String(!invest));$('invest-tab').classList.toggle('on',invest);$('loans-tab').classList.toggle('on',!invest);
- $('page-title').textContent=invest?'投資總覽':'家人借還款';
+ $('page-title').textContent=invest?'未投入股票的現金':'家人借還款';
  $('intro-desc').textContent=(state.title?state.title+'　·　':'')+'記錄至 '+latestDate(invest?data.trace:data.loanTrace);
  $('add-label').textContent=invest?'新增交易':'新增借還款';displayStatus();
  $('view').innerHTML=invest?portfolio():loanView();
@@ -108,11 +195,12 @@ function detail(id,loan=false){
  if(loan){
   h+=detailLines([['上一筆尚欠',twd(r.balance-(e.borrow||0)+(e.repay||0))],['本次借入',twd(e.borrow||0)],['本次還款',twd(e.repay||0)],['交易後尚欠',twd(r.balance)]]);
  }else{
+  h+='<p class="route-detail">'+esc(cashRoute(e))+'</p>';
   if(e.type==='buy'||e.type==='sell'){
    h+=detailLines([['成交股數',qty(e.qty)+' 股'],['成交單價',usd(e.price,6)],['成交總額',usd(e.gross??e.qty*e.price,6)],['手續費',usd(e.fee||0,6)]]);
   }
   if(e.type==='adjustment')h+=detailLines([['增加股數',qty(e.qty)+' 股'],['新增持股成本',e.basis==null?'待確認':usd(e.basis,6)]]);
-  if(e.type==='fx'||e.type==='funding')h+=detailLines([['原有台幣',twd(r.cashTWD-r.deltaTWD)],['台幣增減',signed(r.deltaTWD,twd)],['剩餘台幣',twd(r.cashTWD)]]);
+  h+=detailLines([['原有台幣',twd(r.cashTWD-r.deltaTWD)],['台幣增減',signed(r.deltaTWD,twd)],['剩餘台幣',twd(r.cashTWD)]]);
   h+=detailLines([['原有美元',usd(r.cashUSD-r.deltaUSD,6)],['這筆美元增減',signed(r.deltaUSD,n=>usd(n,6))],['交易後美元餘額',usd(r.cashUSD,6)],...(e.ticker&&r.qtyAfter!=null?[['交易後持股',qty(r.qtyAfter)+' 股']]:[])]);
   if(e.type==='sell'){
    if(e.status==='pending')h+='<p class="fine">這筆交易暫未計入。</p>';
@@ -134,7 +222,7 @@ function edit(id=null,loan=false){
  const current=(loan?state.loans:state.entries).find(e=>e.id===id);
  const e=current||{date:isoToday(),type:'buy',fee:0};
  modal((current?'編輯':'新增')+(loan?'借還款':'交易'),'<form id="edit-form"><div class="form-grid"><label class="fld'+(loan?' wide':'')+'">日期<input required type="date" name="date" value="'+esc(e.date)+'"></label>'+
- (!loan?'<label class="fld">交易類型<select name="type">'+Object.entries(labels).map(([v,t])=>'<option value="'+v+'"'+(e.type===v?' selected':'')+'>'+t+'</option>').join('')+'</select></label>':'')+'</div><div id="fields" class="form-grid tight"></div><label class="fld wide tight">備註（選填）<textarea name="note" rows="2" maxlength="2000">'+esc(e.note)+'</textarea></label>'+
+ (!loan?'<label class="fld">交易類型<select name="type">'+Object.entries(labels).map(([v,t])=>'<option value="'+v+'"'+(e.type===v?' selected':'')+'>'+t+'</option>').join('')+'</select></label>':'')+'</div><div id="fields" class="form-grid tight"></div>'+(!loan?'<label class="fld wide tight">資金來源或去向（選填）<input type="text" name="source" maxlength="180" value="'+esc(e.source||'')+'"></label>':'')+'<label class="fld wide tight">備註（選填）<textarea name="note" rows="2" maxlength="2000">'+esc(e.note)+'</textarea></label>'+
  (!loan?'<label class="tight" style="display:block"><input type="checkbox" name="pending"'+(e.status==='pending'?' checked':'')+'> 待確認，暫不計入金額及持股</label>':'')+
  '<div id="form-error" role="alert"></div><div class="actions"><button class="secondary" type="button" id="cancel-edit">取消</button><button class="primary" type="submit">儲存這筆</button></div></form>');
  const form=$('edit-form');
@@ -146,7 +234,7 @@ function edit(id=null,loan=false){
  $('cancel-edit').onclick=()=>current?detail(current.id,loan):$('panel').close();
  form.onsubmit=ev=>{ev.preventDefault();try{
   const f=new FormData(form),type=loan?'loan':f.get('type');const r={id:id||uid(),date:f.get('date'),note:f.get('note')};
-  if(!loan)r.type=type;if(f.has('pending'))r.status='pending';
+  if(!loan){r.type=type;r.source=f.get('source');}if(f.has('pending'))r.status='pending';
   for(const n of loan?['borrow','repay']:schema[type])r[n]=f.get(n);
   const target=loan?'loans':'entries',next=clone(state);if(current)next[target][next[target].findIndex(x=>x.id===id)]=r;else next[target].push(r);
   state=normalize(next);save();$('panel').close();render();toast(saveFailed?'已更新，請匯出檔案以保存。':'已儲存這筆紀錄');
@@ -160,14 +248,20 @@ function manager(){
 }
 $('import-file').onchange=async ev=>{const f=ev.target.files[0];ev.target.value='';if(!f)return;try{if(f.size>5e6)throw Error('檔案太大，請選擇 5 MB 以下的帳本。');const next=normalize(JSON.parse(await f.text()));if(confirm('匯入 '+next.entries.length+' 筆投資紀錄及 '+next.loans.length+' 筆借還款，取代目前帳本？')){replaceState(next);toast('已匯入帳本');}}catch(err){alert('匯入失敗。'+err.message);}};
 $('invest-tab').onclick=()=>{tab='invest';render();};$('loans-tab').onclick=()=>{tab='loans';render();};
+$('view').oninput=ev=>{
+ if(ev.target.id!=='trial-price')return;
+ const r=data.trace.find(t=>t.entry.id===$('example-transaction').value),price=ev.target.valueAsNumber;
+ $('trial-result').textContent=Number.isFinite(price)&&price>=0?saleTrial(r,price):'請輸入有效的每股賣價。';
+};
 $('view').onchange=ev=>{
+ if(ev.target.id==='example-transaction'){exampleId=ev.target.value;const row=data.trace.find(t=>t.entry.id===exampleId);$('example-result').innerHTML=exampleCalculation(row);return;}
  if(ev.target.id==='filter'){filter=ev.target.value;render();$('filter').focus();return;}
  if(ev.target.hasAttribute('data-scenario')){
   const picked=new Set(Array.from($('view').querySelectorAll('[data-scenario]:checked'),el=>el.dataset.scenario));
   const fstate=clone(state);for(const e of fstate.entries)if(picked.has(e.id))delete e.status;
   const rows=LedgerEngine.calculate(fstate).trace.filter(r=>!state.referenceDate||r.entry.date<=state.referenceDate);
-  const result=rows.length?rows[rows.length-1].cashUSD:0;
-  $('scenario-result').textContent=picked.size?'計入後的美元餘額為 '+usd(result)+(state.referenceCashUSD!=null&&Math.abs(result-state.referenceCashUSD)<.005?'，與原表相符。':'。'):'勾選可查看試算餘額，帳本會保留原值。';
+  const last=rows[rows.length-1], result=last?.cashUSD||0;
+  $('scenario-result').textContent=picked.size?'試算後現金為 '+exactUSD(result)+'、'+twd(last?.cashTWD||0)+'。'+(state.referenceCashUSD!=null&&Math.abs(result-state.referenceCashUSD)<.005?'美元與原表相符。':''):'勾選可查看試算餘額，帳本會保留原值。';
  }
 };
 $('view').onclick=ev=>{const row=ev.target.closest('[data-entry],[data-loan]');if(row)detail(row.dataset.entry??row.dataset.loan,row.hasAttribute('data-loan'));};

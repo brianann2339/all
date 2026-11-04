@@ -33,8 +33,8 @@
       if (!child || event.source !== child || event.origin !== new URL(dashboardURL).origin ||
           !m || m.channel !== channel || m.nonce !== nonce || Date.now() > expires) return;
       if (m.action === 'ready') {
-        const {entries, loans, referenceCashUSD, referenceDate, title, id} = window.LedgerUI.getState();
-        child.postMessage({channel, nonce, action:'import', book:{entries,loans,referenceCashUSD,referenceDate,title,id}},event.origin);
+        const book = window.LedgerUI.getState();
+        child.postMessage({channel, nonce, action:'import', book},event.origin);
       } else if (m.action === 'complete' || m.action === 'cancel') {
         const note = document.querySelector('#github-transfer-info');
         if (note) note.textContent = m.action === 'complete' ? ' 已在 GitHub Pages 載入。' : ' 已保留 GitHub Pages 目前的帳本。';
