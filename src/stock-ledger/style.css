@@ -58,3 +58,39 @@
  .worked{padding:13px 14px}.worked-top{align-items:flex-start;flex-direction:column}.worked-top select{width:100%;max-width:none;font-size:16px}.worked-math{display:grid;gap:5px}
  .wallet-cell{grid-template-columns:minmax(27px,auto) 1fr;padding:5px;gap:1px 4px}.wallet-cell b,.wallet-cell strong{font-size:13px}
 }
+
+/* Stock quantities, acquisition costs and recorded fills. */
+.stock-position{display:grid;grid-template-columns:minmax(95px,.75fr) 3fr;gap:16px;align-items:start;padding:12px 15px;background:#f1f5ed;border-radius:10px;margin-bottom:8px}
+.stock-name h3{font-size:20px;line-height:1.2;overflow-wrap:anywhere}
+.stock-name>b{display:block;color:var(--teal);margin-top:4px;font-size:14px}
+.stock-position dl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0}
+.stock-position dt,.trade-tools small,.trade-history th small,.trade-history td small{font-size:12px;color:var(--mut);font-weight:500}
+.stock-position dd{margin:3px 0 0;font-size:18px;font-weight:700;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.stock-position dd small{display:block;color:var(--mut);font-size:12px;font-weight:500}
+.trade-history{margin-top:14px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.trade-history summary{padding:11px 0;color:var(--pine);font-weight:700;cursor:pointer}
+.trade-history summary small{color:var(--mut);font-weight:500;margin-left:6px}
+.trade-tools{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:4px 0 9px}
+.trade-tools label{font-size:14px;font-weight:600}
+.trade-tools select{border:1px solid var(--line);border-radius:7px;padding:6px 9px;background:var(--white);font:inherit;color:var(--ink)}
+.trade-history table{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums}
+.trade-history th,.trade-history td{padding:8px 9px;text-align:right}
+.trade-history thead th{background:#f1f4ed;font-size:12px;color:var(--mut)}
+.trade-history th:first-child{text-align:left}
+.trade-history tbody tr{border-top:1px solid var(--line)}
+.trade-history th small,.trade-history td small{display:block}
+.trade-terms{display:block;color:var(--pine);margin-bottom:3px;font-variant-numeric:tabular-nums}
+@media(max-width:650px){
+ .stock-position{display:block;padding:12px}
+ .stock-name{display:flex;align-items:baseline;gap:9px;margin-bottom:9px}
+ .stock-position dl{gap:8px}.stock-position dd{font-size:15px}
+ .trade-tools select{font-size:16px}
+}
+@media(max-width:540px){
+ .trade-history thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+ .trade-history tbody tr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:9px 0}
+ .trade-history tbody th{grid-column:1/-1;display:flex;align-items:center;gap:5px;padding:0;min-width:0;overflow-wrap:anywhere}
+ .trade-history th small{margin-left:auto}
+ .trade-history td{display:block;padding:0;text-align:left;min-width:0;overflow-wrap:anywhere}
+ .trade-history td:before{content:attr(data-label);display:block;font-size:11px;color:var(--mut)}
+}

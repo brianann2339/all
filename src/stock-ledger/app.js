@@ -94,6 +94,48 @@ function wallet(title,amount,items,format,dark){
 function equation(prev,delta,total,fmt){
  return fmt(prev)+(delta<0?' − ':' + ')+fmt(Math.abs(delta))+' = '+fmt(total);
 }
+const isTrade=e=>e.type==='buy'||e.type==='sell';
+const tradeGross=e=>e.gross??e.qty*e.price;
+const tradeShares=n=>nf(n,0,20);
+const tradePrice=n=>usd(n,12);
+function tradeTerms(e){
+ const terms=tradeShares(e.qty)+' 股，每股 '+tradePrice(e.price)+'，成交總額 '+exactUSD(tradeGross(e));
+ return e.fee?terms+'，手續費 '+exactUSD(e.fee):terms;
+}
+function tradeHistoryRows(trades,ticker=''){
+ return trades.filter(e=>!ticker||e.ticker===ticker).map(e=>
+  '<tr><th scope="row"><b>'+esc(e.ticker)+'</b> '+badge(e.type)+'<small>'+esc(e.date)+'</small></th>'+
+  '<td data-label="股數">'+tradeShares(e.qty)+'</td><td data-label="每股成交價">'+tradePrice(e.price)+'</td>'+
+  '<td data-label="成交總額">'+exactUSD(tradeGross(e))+(e.fee?'<small>手續費 '+exactUSD(e.fee)+'</small>':'')+'</td></tr>'
+ ).join('');
+}
+function confirmedTrades(){
+ return data.trace.map(r=>r.entry).filter(e=>isTrade(e)&&e.status!=='pending').reverse();
+}
+function stockPanel(){
+ const trades=confirmedTrades();
+ const lastBuys=new Map();
+ for(const e of trades)if(e.type==='buy'&&!lastBuys.has(e.ticker))lastBuys.set(e.ticker,e);
+ let h='<section class="box space stock-book"><div class="section-head"><h2>持股與買進成本</h2><small>金額單位為美元</small></div>';
+ h+=data.holdings.length?data.holdings.map(p=>{
+  const buy=lastBuys.get(p.ticker);
+  return '<article class="stock-position"><div class="stock-name"><h3>'+esc(p.ticker)+'</h3><b>'+qty(p.qty)+' 股</b></div>'+
+   '<dl><div><dt>平均每股成本</dt><dd>'+(p.averageCost==null?'待確認':exactUSD(p.averageCost))+'</dd></div>'+
+   '<div><dt>最近買進單價</dt><dd>'+(buy?tradePrice(buy.price)+'<small>'+esc(buy.date)+'</small>':'尚無買入紀錄')+'</dd></div>'+
+   '<div><dt>持股總成本</dt><dd>'+(p.basis==null?'待確認':exactUSD(p.basis))+'</dd></div></dl></article>';
+ }).join(''):'<p class="fine">目前沒有持股。</p>';
+ if(data.holdings.length)h+='<p class="fine">平均每股成本＝剩餘持股總成本 ÷ 股數，包含已登記的買入手續費。</p>';
+ if(trades.length){
+  const tickers=[...new Set(trades.map(e=>e.ticker))].sort();
+  h+='<details class="trade-history"'+(trades.length<=12?' open':'')+'><summary>查每筆買賣的股數與價格 <small>'+trades.length+' 筆成交</small></summary>'+
+   '<div class="trade-tools"><label>股票代號 <select id="trade-ticker"><option value="">全部股票</option>'+
+   tickers.map(t=>'<option value="'+esc(t)+'">'+esc(t)+'</option>').join('')+'</select></label><small>由新到舊，含已賣出的股票</small></div>'+
+   '<table aria-label="買賣成交紀錄"><thead><tr><th scope="col">股票／日期</th><th scope="col">股數</th><th scope="col">每股成交價</th><th scope="col">成交總額</th></tr></thead>'+
+   '<tbody id="trade-records">'+tradeHistoryRows(trades)+'</tbody></table></details>';
+ }
+ h+='<p class="profit-foot">已能核算的賣出損益合計 <b>'+signed(data.realizedKnown,exactUSD)+'</b>。'+(data.unknownSales?'另外 '+data.unknownSales+' 筆賣出的成本待確認。':'')+'</p>';
+ return h+'</section>';
+}
 function saleTrial(r,price){
  const e=r.entry, proceeds=e.qty*price-(e.fee||0);
  const result=r.cashUSD-r.deltaUSD+proceeds;
@@ -104,6 +146,7 @@ function exampleCalculation(r){
  if(!r)return '';
  const e=r.entry, beforeUSD=r.cashUSD-r.deltaUSD, beforeTWD=r.cashTWD-r.deltaTWD;
  const text=[cashRoute(e)];
+ if(isTrade(e))text.push(tradeTerms(e)+'。');
  if(e.status==='pending')text.push('尚待確認，這筆暫未計入現金。');
  else if(e.type==='sell'&&r.realized!=null){
   const cost=r.deltaUSD-r.realized;
@@ -134,7 +177,8 @@ function trailRow(r){
  if(e.status==='pending')extra='待核對 '+(e.type==='cash'?signed(e.usd,exactUSD):'')+'，暫未計入。';
  else if(r.cashUSD<-.000001&&r.deltaUSD<0)extra='這筆付款後短少 '+exactUSD(-r.cashUSD)+'。';
  else if(e.type==='sell')extra=r.realized==null?'賣出收款已計入，獲利待確認。':'收回成本 '+exactUSD(r.deltaUSD-r.realized)+'，'+(r.realized<0?'虧損 ':'獲利 ')+exactUSD(Math.abs(r.realized))+'。';
- return '<button class="cash-row" data-entry="'+esc(e.id)+'"><span class="flow-id"><small>'+esc(e.date)+'</small><span>'+badge(e.type)+(e.ticker?' <b>'+esc(e.ticker)+'</b>':'')+'</span></span><span class="flow-route">'+esc(cashRoute(e))+(extra?'<small>'+esc(extra)+'</small>':'')+'</span>'+column('台幣',r.deltaTWD,r.cashTWD,twd)+column('美元',r.deltaUSD,r.cashUSD,exactUSD)+'</button>';
+ const terms=isTrade(e)?'<b class="trade-terms">'+esc(tradeTerms(e))+'</b>':'';
+ return '<button class="cash-row" data-entry="'+esc(e.id)+'"><span class="flow-id"><small>'+esc(e.date)+'</small><span>'+badge(e.type)+(e.ticker?' <b>'+esc(e.ticker)+'</b>':'')+'</span></span><span class="flow-route">'+terms+esc(cashRoute(e))+(extra?'<small>'+esc(extra)+'</small>':'')+'</span>'+column('台幣',r.deltaTWD,r.cashTWD,twd)+column('美元',r.deltaUSD,r.cashUSD,exactUSD)+'</button>';
 }
 function portfolio(){
  const rows=data.trace;
@@ -144,7 +188,7 @@ function portfolio(){
  const outUSD=cashRows.reduce((sum,r)=>sum+Math.min(0,r.deltaUSD),0);
  if(inUSD)usdItems.push(['其他美元收入',inUSD]);if(outUSD)usdItems.push(['其他美元支出',outUSD]);
  let h='<div class="wallets">'+wallet('美元現金',data.cashUSD,usdItems,exactUSD,true)+wallet('台幣現金',data.cashTWD,[['投入的台幣',amounts(rows,'funding','deltaTWD')],['換成美元用掉',amounts(rows,'fx','deltaTWD')]],twd,false)+'</div>';
- h+=examplePanel();
+ h+=stockPanel()+examplePanel();
  const hasRef=state.referenceCashUSD!=null;
  const cutoff=hasRef&&state.referenceDate?state.referenceDate:null;
  const asof=cutoff?data.trace.filter(r=>r.entry.date<=cutoff):data.trace;
@@ -167,10 +211,7 @@ function portfolio(){
  h+='<section class="box ledger space"><div class="ledger-tools"><div><h2>現金流水帳</h2><p>從第一筆開始，看每筆之後還有多少現金。點選可看金額與來源。</p></div><select id="filter" aria-label="篩選交易類型"><option value="money"'+(filter==='money'?' selected':'')+'>只看現金往來</option><option value="all"'+(filter==='all'?' selected':'')+'>全部紀錄（含待核對、股數調整）</option>'+Object.entries(labels).map(([v,t])=>'<option value="'+v+'"'+(filter===v?' selected':'')+'>'+t+'</option>').join('')+'</select></div>';
  const visible=rows.filter(r=>filter==='money'?r.deltaUSD!==0||r.deltaTWD!==0:filter==='all'||r.entry.type===filter);
  h+=(visible.map(trailRow).join('')||noRows)+'</section>';
- h+='<section class="box space"><div class="section-head"><h2>股票部位</h2><small>與現金分開計算</small></div>';
- h+=data.holdings.length?'<div class="positions">'+data.holdings.map(p=>'<div class="pos"><div aria-hidden="true" class="pos-abbr">'+esc(p.ticker.slice(0,2))+'</div><div><strong>'+esc(p.ticker)+'</strong><small>'+(p.basis==null?'成本待確認':'投入成本 '+esc(exactUSD(p.basis)))+'</small></div><span class="qty">'+esc(qty(p.qty))+' 股</span></div>').join('')+'</div>':'<p class="fine">目前沒有持股。</p>';
- h+='<p class="profit-foot">已能核算的賣出損益合計 <b>'+signed(data.realizedKnown,exactUSD)+'</b>。'+(data.unknownSales?'另外 '+data.unknownSales+' 筆賣出的成本待確認。':'')+'</p>';
- return h+'</section>';
+ return h;
 }
 function loanView(){
  const borrowed=state.loans.reduce((a,e)=>a+(e.borrow||0),0),paid=state.loans.reduce((a,e)=>a+(e.repay||0),0);
@@ -197,7 +238,7 @@ function detail(id,loan=false){
  }else{
   h+='<p class="route-detail">'+esc(cashRoute(e))+'</p>';
   if(e.type==='buy'||e.type==='sell'){
-   h+=detailLines([['成交股數',qty(e.qty)+' 股'],['成交單價',usd(e.price,6)],['成交總額',usd(e.gross??e.qty*e.price,6)],['手續費',usd(e.fee||0,6)]]);
+   h+=detailLines([['成交股數',tradeShares(e.qty)+' 股'],['每股成交價',tradePrice(e.price)],['成交總額',exactUSD(tradeGross(e))],['手續費',exactUSD(e.fee||0)]]);
   }
   if(e.type==='adjustment')h+=detailLines([['增加股數',qty(e.qty)+' 股'],['新增持股成本',e.basis==null?'待確認':usd(e.basis,6)]]);
   h+=detailLines([['原有台幣',twd(r.cashTWD-r.deltaTWD)],['台幣增減',signed(r.deltaTWD,twd)],['剩餘台幣',twd(r.cashTWD)]]);
@@ -226,10 +267,36 @@ function edit(id=null,loan=false){
  (!loan?'<label class="tight" style="display:block"><input type="checkbox" name="pending"'+(e.status==='pending'?' checked':'')+'> 待確認，暫不計入金額及持股</label>':'')+
  '<div id="form-error" role="alert"></div><div class="actions"><button class="secondary" type="button" id="cancel-edit">取消</button><button class="primary" type="submit">儲存這筆</button></div></form>');
  const form=$('edit-form');
- function fields(type){
-  $('fields').innerHTML=(loan?['borrow','repay']:schema[type]).map(n=>field(n,e[n],type)).join('')+
-   (type==='cash'?'<p class="fld wide form-hint">收入填正數，支出填負數。</p>':type==='adjustment'?'<p class="fld wide form-hint">適用於帳上多出的股數。成本未知可留白，相關賣出的獲利會標成待確認。這筆紀錄不會扣現金。</p>':'');
+ function refreshSellReference(){
+  const output=$('sell-reference');
+  if(!output)return;
+  const date=form.elements.date.value, symbol=form.elements.ticker.value.trim().toUpperCase();
+  const saleIndex=current?state.entries.indexOf(current):state.entries.length;
+  const prior=state.entries.filter((item,i)=>item.ticker&&item!==current&&item.status!=='pending'&&
+   (item.date<date||(item.date===date&&i<saleIndex)));
+  $('sell-symbols').innerHTML=[...new Set(prior.map(item=>item.ticker))].sort().map(t=>'<option value="'+esc(t)+'"></option>').join('');
+  if(!dateOk(date)||!symbol){output.textContent='選好日期並輸入股票代號，就能查看賣出前的股數和買價。';return;}
+  const history=LedgerEngine.calculate({entries:prior.filter(item=>item.ticker===symbol)});
+  const lot=history.holdings[0], lastBuy=history.trace.findLast(r=>r.entry.type==='buy'&&r.deltaUSD<0)?.entry;
+  const previousQty=history.trace.at(-1)?.qtyAfter??0;
+  output.innerHTML=detailLines([
+   ['賣出前持股',qty(previousQty)+' 股'+(previousQty<0?'（股數待核對）':'')],
+   ['每股平均成本（含買入費用）',lot?(lot.averageCost==null?'成本待確認':exactUSD(lot.averageCost)):'—'],
+   ['最近一次買進',lastBuy?lastBuy.date+'　'+qty(lastBuy.qty)+' 股，每股 '+exactUSD(lastBuy.price):'截至這筆交易前，沒有買進紀錄']
+  ]);
  }
+ function fields(type){
+  const inputs=(loan?['borrow','repay']:schema[type]).map(n=>field(n,e[n],type));
+  if(type==='sell')inputs.splice(2,0,'<datalist id="sell-symbols"></datalist><div class="fld wide" id="sell-reference" aria-live="polite"></div>');
+  $('fields').innerHTML=inputs.join('')+
+   (type==='cash'?'<p class="fld wide form-hint">收入填正數，支出填負數。</p>':type==='adjustment'?'<p class="fld wide form-hint">適用於帳上多出的股數。成本未知可留白，相關賣出的獲利會標成待確認。這筆紀錄不會扣現金。</p>':'');
+  if(type==='sell'){
+   form.elements.ticker.setAttribute('list','sell-symbols');
+   form.elements.ticker.oninput=refreshSellReference;
+   refreshSellReference();
+  }
+ }
+ form.elements.date.onchange=refreshSellReference;
  fields(loan?'loan':e.type);if(!loan)form.elements.type.addEventListener('change',()=>fields(form.elements.type.value));
  $('cancel-edit').onclick=()=>current?detail(current.id,loan):$('panel').close();
  form.onsubmit=ev=>{ev.preventDefault();try{
@@ -254,6 +321,7 @@ $('view').oninput=ev=>{
  $('trial-result').textContent=Number.isFinite(price)&&price>=0?saleTrial(r,price):'請輸入有效的每股賣價。';
 };
 $('view').onchange=ev=>{
+ if(ev.target.id==='trade-ticker'){$('trade-records').innerHTML=tradeHistoryRows(confirmedTrades(),ev.target.value);return;}
  if(ev.target.id==='example-transaction'){exampleId=ev.target.value;const row=data.trace.find(t=>t.entry.id===exampleId);$('example-result').innerHTML=exampleCalculation(row);return;}
  if(ev.target.id==='filter'){filter=ev.target.value;render();$('filter').focus();return;}
  if(ev.target.hasAttribute('data-scenario')){
