@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#173c34">
+<title>資金手帳｜投資試算</title><link rel="stylesheet" href="./style.css">
+<script defer src="./engine.js"></script><script defer src="./seed.js"></script><script defer src="./app.js"></script><script defer src="./bridge.js"></script>
+</head>
+<body>
+<header class="mast"><div class="mast-in"><a class="brand" href="#main" aria-label="資金手帳首頁"><span class="mark" aria-hidden="true"><i></i><i></i><i></i></span>資金手帳</a><span class="mast-sub">投資試算</span><div class="head-right"><span id="save-status" class="save-state"></span><button class="plain small" id="manage" type="button"><span aria-hidden="true">⇅</span> 資料管理</button></div></div></header>
+<main id="main">
+<div class="intro"><div><div class="eyebrow"><i></i> 個人帳本</div><h1 id="page-title">投資總覽</h1><p id="intro-desc"></p></div><button id="add" class="primary" type="button"><span aria-hidden="true">＋</span> <span id="add-label">新增交易</span></button></div>
+<nav class="tabs" aria-label="帳本分頁"><button id="invest-tab" type="button" class="on" aria-pressed="true">投資帳本</button><button id="loans-tab" type="button" aria-pressed="false">家人借還款</button></nav>
+<section id="view" aria-label="帳本內容"></section>
+<footer><span class="footer-mark" aria-hidden="true">▤</span> 資金手帳<span>金額依幣別分開計算</span></footer>
+</main>
+<dialog id="panel" aria-labelledby="dialog-title"><div class="dialog-head"><h2 id="dialog-title"></h2><button id="close" class="x" type="button" aria-label="關閉">×</button></div><div id="panel-body"></div></dialog>
+<div id="toast" role="status" aria-live="polite"></div><input id="import-file" type="file" accept=".json,application/json" hidden>
+<noscript>請開啟 JavaScript 以使用帳本試算。</noscript>
+</body></html>

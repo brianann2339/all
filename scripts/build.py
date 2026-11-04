@@ -84,6 +84,7 @@ def main():
     (destination / "index.html").write_text(output)
     shutil.copyfile(ROOT / "src/styles.css", destination / "styles.css")
     shutil.copyfile(ROOT / "src/favicon.svg", destination / "favicon.svg")
+    shutil.copytree(ROOT / "src/stock-ledger", destination / "stock-ledger", dirs_exist_ok=True)
     (destination / ".nojekyll").touch()
     print(f"Built {len(data['sites'])} sites into dist/index.html")
 
