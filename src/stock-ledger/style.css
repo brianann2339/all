@@ -94,3 +94,18 @@
  .trade-history td{display:block;padding:0;text-align:left;min-width:0;overflow-wrap:anywhere}
  .trade-history td:before{content:attr(data-label);display:block;font-size:11px;color:var(--mut)}
 }
+
+.entry-shortcuts{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+.entry-shortcuts button{background:#fff}
+.profit-box,.contributions{margin:16px 0 0}
+.profit-box{padding:20px;border:1px solid #b8cbbc;border-radius:14px;background:#eef3e8}
+.profit-head,.quote-line,.contributions dl>div{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.profit-head h2,.contributions h2{font-size:18px}.profit-head strong{font-size:clamp(26px,4vw,38px);letter-spacing:-.035em;color:var(--pine);font-variant-numeric:tabular-nums}.profit-head p,.profit-note,.profit-explain,.quote-line{font-size:13px}
+.profit-head p,.profit-note,.quote-line{color:#415748}.profit-head button,.quote-line button{font-size:13px;white-space:nowrap}
+.profit-parts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:14px 0 8px;padding:12px 0;border-block:1px solid #cfdbca}
+.profit-parts dt{font-size:13px;color:var(--mut)}.profit-parts dd,.contributions dd{font-size:16px;font-weight:650;margin:3px 0;font-variant-numeric:tabular-nums}
+.profit-explain summary{cursor:pointer;color:var(--pine);font-weight:650}.profit-explain p,.profit-note{margin:6px 0 0}
+.contributions dl{margin:8px 0}.contributions dl>div{padding:3px 0}.contributions dt{font-size:14px}.contributions dd{font-size:14px}.contributions dd span{color:var(--mut);padding:0 6px}
+.quote-line{grid-column:1/-1;flex-wrap:wrap;border-top:1px solid #ccd7c8;padding-top:9px}.quote-line a{color:var(--pine);text-decoration:underline}.stock-name small{display:block;color:var(--mut);font-size:13px}.pill.dividend{background:#e9e4fa;color:#554179}
+@media(max-width:600px){.entry-shortcuts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.entry-shortcuts button{padding:9px}.profit-box{padding:14px}.profit-head{align-items:flex-start}.profit-head button{padding:6px 8px}.profit-parts{grid-template-columns:1fr;gap:5px}.profit-parts>div{display:flex;justify-content:space-between;gap:8px}.profit-parts dd{font-size:14px;margin:0;text-align:right}.contributions dl>div{flex-wrap:wrap;gap:3px 8px}.quote-line{margin-top:8px}.stock-name{flex-wrap:wrap}}
+.profit-equation{font-size:14px;line-height:1.7;margin:10px 0 12px;font-variant-numeric:tabular-nums}.profit-label{font-size:13px;font-weight:700}.profit-label+.profit-parts{margin-top:4px}
