@@ -38,7 +38,7 @@
     const layout = document.getElementById('book-layout');
     document.body.insertBefore(layout.content.cloneNode(true), gate);
     try {
-      await load('./app.js?v=trades3');
+      await load('./app.js?v=fx4');
       await load('./source-view.js');
       gate.remove();
     } catch {

@@ -46,9 +46,59 @@ function normalize(raw){
  }
  return next;
 }
+function applySeedCorrection(book){
+ const correction=seed.seedCorrection;
+ if(!correction||book.id!==seed.id)return false;
+ const {primaryId,previousEntries,previousReconciliationNote}=correction;
+ const latest=new Map(seed.entries.map(e=>[e.id,e]));
+ const fx=latest.get(primaryId);
+ if(fx?.type!=='fx'||!Array.isArray(previousEntries))return false;
+ const originals=previousEntries.filter(e=>e.id===primaryId);
+ const sameTerms=(a,b)=>a.type===b.type&&a.date===b.date&&a.status===b.status&&
+  schema[a.type].every(k=>(a[k]??null)===(b[k]??null));
+ const unchanged=(a,b)=>a.id===b.id&&sameTerms(a,b)&&a.note===(b.note||'')&&(!a.source||a.source===b.source);
+ const index=book.entries.findIndex(e=>e.id===primaryId);
+ const local=book.entries[index];
+ const needsUpdate=local&&originals.some(old=>unchanged(local,old));
+ // An account holder may already have entered the missing credit in another row.
+ const historic=new Map(latest);
+ previousEntries.forEach(e=>historic.set(e.id,e));
+ const existingCredit=book.entries.find(row=>{
+  if(row.id===primaryId||row.status==='pending'||!['fx','cash'].includes(row.type))return false;
+  if(seed.referenceDate&&row.date>seed.referenceDate)return false;
+  const old=historic.get(row.id);
+  const oldUSD=old&&old.status!=='pending'&&['fx','cash'].includes(old.type)?old.usd:0;
+  return Math.abs(row.usd-oldUSD-fx.usd)<1e-8;
+ });
+ const wasFX=existingCredit&&historic.get(existingCredit.id);
+ const oldTWD=wasFX?.type==='fx'&&wasFX.status!=='pending'?wasFX.twd:0;
+ const alreadyExchanged=existingCredit?.type==='fx'&&Math.abs(existingCredit.twd-oldTWD-fx.twd)<1e-8;
+ const hasCorrectFX=local?.type==='fx'&&local.status!=='pending'&&local.twd===fx.twd&&local.usd===fx.usd;
+ const canReplace=needsUpdate&&!existingCredit;
+ const useExisting=alreadyExchanged&&(!local||needsUpdate);
+ const customNote=book.reconciliationNote&&book.reconciliationNote!==previousReconciliationNote&&book.reconciliationNote!==seed.reconciliationNote;
+ if(!hasCorrectFX&&!canReplace&&!useExisting){
+  if(customNote)return false;
+  book.reconciliationNote='這台裝置的交易紀錄已修改，請核對已登記的換匯與美元入帳是否為同一筆。';
+  return true;
+ }
+ if(needsUpdate){
+  if(alreadyExchanged)book.entries.splice(index,1);
+  else book.entries[index]=clone(fx);
+ }
+ for(const row of book.entries){
+  if(row.id===primaryId)continue;
+  const prior=previousEntries.find(e=>unchanged(row,e));
+  const current=latest.get(row.id);
+  if(prior&&current){row.note=current.note||'';if(current.source)row.source=current.source;}
+ }
+ if(!customNote)book.reconciliationNote=seed.reconciliationNote;
+ return !!needsUpdate;
+}
 let state=normalize(seed), data;
 try{const stored=localStorage.getItem(key);if(stored){
- const saved=JSON.parse(stored);
+ const saved=normalize(JSON.parse(stored));
+ const revised=applySeedCorrection(saved);
  if (saved.id===seed.id && Array.isArray(saved.entries)) {
   if(!saved.reconciliationNote && seed.reconciliationNote)saved.reconciliationNote=seed.reconciliationNote;
   const initial=new Map(seed.entries.map(e=>[e.id,e]));
@@ -58,11 +108,12 @@ try{const stored=localStorage.getItem(key);if(stored){
   }
  }
  state=normalize(saved);
+ if(revised)save();
 }}catch(e){saveFailed=true;}
 function save(){try{localStorage.setItem(key,JSON.stringify(state));saveFailed=false;}catch(e){saveFailed=true;}}
 function toast(s){$('toast').textContent=s;clearTimeout(timer);timer=setTimeout(()=>$('toast').textContent='',3600);}
 function displayStatus(){$('save-status').textContent=saveFailed?'此瀏覽器未能儲存':'儲存在此裝置';}
-function replaceState(raw){const next=normalize(raw);state=next;save();tab='invest';filter='money';exampleId='';if($('panel').open)$('panel').close();render();}
+function replaceState(raw){const next=normalize(raw);applySeedCorrection(next);state=normalize(next);save();tab='invest';filter='money';exampleId='';if($('panel').open)$('panel').close();render();}
 window.LedgerUI={getState:()=>clone(state),importState:replaceState,hasLocalChanges:()=>JSON.stringify(state)!==JSON.stringify(normalize(seed))};
 function badge(type){return '<span class="pill '+esc(type)+'">'+esc(labels[type]||type)+'</span>';}
 function card(label,value,desc,sym,dark=false,extra=''){return '<article class="card'+(dark?' dark':'')+'"><div class="card-top"><span class="sym" aria-hidden="true">'+sym+'</span><h2>'+label+'</h2></div><div class="big">'+esc(value)+'</div><p>'+esc(desc)+'</p>'+extra+'</article>';}
