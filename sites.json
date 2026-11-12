@@ -1,6 +1,6 @@
 {
   "owner": "brianann2339",
-  "checkedAt": "2026-11-11T06:28:45+00:00",
+  "checkedAt": "2026-11-12T07:15:37+00:00",
   "sites": [
     {
       "repo": "dr_houyuehtseng",
@@ -287,6 +287,19 @@
       "status": 200,
       "sourceTitle": "診間語音 · 點一下，替你說",
       "sourceDescription": "iPad-friendly Traditional Chinese voice cards with a deep male voice"
+    },
+    {
+      "repo": "card-dining-map",
+      "repositoryId": 1454767844,
+      "curated": false,
+      "category": "life",
+      "title": "頂級卡特約店家目錄",
+      "description": "頂級卡特約店家目錄：非官方信用卡餐飲優惠地圖（以 amex.poslab.info 為基礎，加入國泰、玉山、Visa、Mastercard、JCB 權益）",
+      "url": "https://brianann2339.github.io/card-dining-map/",
+      "repository": "https://github.com/brianann2339/card-dining-map",
+      "status": 200,
+      "sourceTitle": "頂級卡特約店家目錄",
+      "sourceDescription": "頂級卡特約店家目錄：非官方信用卡餐飲優惠地圖（以 amex.poslab.info 為基礎，加入國泰、玉山、Visa、Mastercard、JCB 權益）"
     },
     {
       "repo": "btch-er-ccc.pages.dev",
