@@ -1,6 +1,6 @@
 {
   "owner": "brianann2339",
-  "checkedAt": "2026-11-24T09:57:28+00:00",
+  "checkedAt": "2026-11-25T08:40:00+00:00",
   "sites": [
     {
       "repo": "dr_houyuehtseng",
@@ -300,6 +300,32 @@
       "status": 200,
       "sourceTitle": "頂級卡特約店家目錄",
       "sourceDescription": "頂級卡特約店家目錄：非官方信用卡餐飲優惠地圖（以 amex.poslab.info 為基礎，加入國泰、玉山、Visa、Mastercard、JCB 權益）"
+    },
+    {
+      "repo": "japan-em-conference-map",
+      "repositoryId": 1470766629,
+      "curated": false,
+      "category": "medical",
+      "title": "日本急診相關醫學會議追蹤Japanese Prefectures沖縄 / Okinawa鹿児島 / Kagoshima宮崎 / Miyazaki大分 / Oita熊本 / kumamoto長崎 / Nagasaki佐賀 / Saga福岡 / Fukuoka高知 / Kochi愛媛 / Ehime香川 / Kagawa徳島 / Tokushima山口 / Yamaguchi広島 / Hiroshima岡山 / Okayama島根 / Shimane鳥取 / Tottori和歌山 / Wakayama奈良 / Nara兵庫 / Hyogo大阪 / Osaka京都 / Kyoto滋賀 / Shiga三重 / Mie愛知 / Aichi静岡 / Shizuoka岐阜 / Gifu長野 / Nagano山梨 / Yamanashi福井 / Fukui石川 / Ishikawa富山 / Toyama新潟 / Niigata神奈川 / Kanagawa東京 / Tokyo千葉 / Chiba埼玉 / Saitama群馬 / Gunma栃木 / Tochigi茨城 / Ibaraki福島 / Fukushima山形 / Yamagata秋田 / Akita宮城 / Miyagi岩手 / Iwate青森 / Aomori北海道 / HokkaidoJCA 第39回日本冠疾患学会学術集会JSR 日本蘇生学会 第45回大会JSSI 第39回日本外科感染症学会総会学術集会JSASEM 第72回 日本宇宙航空環境医学会大会JAAM-CHUBU 第29回日本救急医学会中部地方会総会・学術集会；JSTS 第2回日本搬送学会学術集会JSPM 第21回日本病院前救急診療医学会総会・学術集会JUHMS 第25回日本高気圧潜水医学会関東・東北地方会 学術集会SIRET 第13回救急・外傷IVR症例検討会（SIRET）EMS-SYMP 第35回全国救急隊員シンポジウム YOKOHAMA 2027；NATIONAL-MC 令和8年度第2回全国メディカルコントロール協議会連絡会；JCS JCS2027－第91回日本循環器学会学術集会・APSC2027；JSEM 第30回日本臨床救急医学会総会・学術集会；JAEN 第29回日本救急看護学会学術集会JNST 第50回日本脳神経外傷学会JAAM-KANTO 第77回日本救急医学会関東地方会学術集会・第64回救急隊員学術研究会JSAEM 第63回日本腹部救急医学会総会JAAM-KINKI 第133回近畿救急医学研究会（日本救急医学会近畿地方会）JSS-STROKE STROKE 2027／第52回日本脳卒中学会学術集会・第56回日本脳卒中の外科学会学術集会・第43回SAH/スパズム・シンポジウム；CVIT 第35回日本心血管インターベンション治療学会学術集会（CVIT 2027）JADM 第32回日本災害医学会総会・学術集会；JAID-JSC 第101回日本感染症学会総会・学術講演会／第75回日本化学療法学会総会 合同学会；JSOA 日本スポーツ整形外科学会2027（JSOA2027）JSS 第41回日本Shock学会学術集会；JAEP 第35回日本精神科救急学会学術総会JSICM 第54回日本集中治療医学会学術集会JSBI 第53回日本熱傷学会総会・学術集会JSMED 2027年度 第47回 日本登山医学会学術集会JAST 第41回日本外傷学会総会・学術集会JAAM-CHUSHI 第43回日本救急医学会中国四国地方会JAAM-TOHOKU 第41回東北救急医学会総会・学術集会／第37回日本救急医学会東北地方会JSTH 第49回日本血栓止血学会学術集会JAAM-KYUSHU 第31回日本救急医学会九州地方会JABR 第39回日本脳死・脳蘇生学会総会・学術集会JAAM-KINKI 第134回近畿救急医学研究会（日本救急医学会近畿地方会）JRCM 第49回日本呼吸療法医学会学術集会JSEP 第40回日本小児救急医学会学術集会・第34回小児集中治療ワークショップJSCT 第49回日本中毒学会総会・学術集会JSBPCC 第38回日本急性血液浄化学会学術集会J-POCUS 第19回日本ポイントオブケア超音波学会学術集会JSDN 日本災害看護学会 第29回年次大会JAAM 第55回日本救急医学会総会・学術集会JHFS 第31回日本心不全学会学術集会HOKKAIDO-EM 第51回北海道救急医学会学術集会JSSM 第38回日本臨床スポーツ医学会学術集会JSELS 第13回日本救急救命学会学術集会JSAS 第34回（次回）日本航空医療学会総会WCICC 第20回世界集中治療医学会学術集会（WCICC2029）",
+      "description": "日本急診與急性照護相關醫學會議地圖及每日官方來源監測",
+      "url": "https://brianann2339.github.io/japan-em-conference-map/",
+      "repository": "https://github.com/brianann2339/japan-em-conference-map",
+      "status": 200,
+      "sourceTitle": "日本急診相關醫學會議追蹤Japanese Prefectures沖縄 / Okinawa鹿児島 / Kagoshima宮崎 / Miyazaki大分 / Oita熊本 / kumamoto長崎 / Nagasaki佐賀 / Saga福岡 / Fukuoka高知 / Kochi愛媛 / Ehime香川 / Kagawa徳島 / Tokushima山口 / Yamaguchi広島 / Hiroshima岡山 / Okayama島根 / Shimane鳥取 / Tottori和歌山 / Wakayama奈良 / Nara兵庫 / Hyogo大阪 / Osaka京都 / Kyoto滋賀 / Shiga三重 / Mie愛知 / Aichi静岡 / Shizuoka岐阜 / Gifu長野 / Nagano山梨 / Yamanashi福井 / Fukui石川 / Ishikawa富山 / Toyama新潟 / Niigata神奈川 / Kanagawa東京 / Tokyo千葉 / Chiba埼玉 / Saitama群馬 / Gunma栃木 / Tochigi茨城 / Ibaraki福島 / Fukushima山形 / Yamagata秋田 / Akita宮城 / Miyagi岩手 / Iwate青森 / Aomori北海道 / HokkaidoJCA 第39回日本冠疾患学会学術集会JSR 日本蘇生学会 第45回大会JSSI 第39回日本外科感染症学会総会学術集会JSASEM 第72回 日本宇宙航空環境医学会大会JAAM-CHUBU 第29回日本救急医学会中部地方会総会・学術集会；JSTS 第2回日本搬送学会学術集会JSPM 第21回日本病院前救急診療医学会総会・学術集会JUHMS 第25回日本高気圧潜水医学会関東・東北地方会 学術集会SIRET 第13回救急・外傷IVR症例検討会（SIRET）EMS-SYMP 第35回全国救急隊員シンポジウム YOKOHAMA 2027；NATIONAL-MC 令和8年度第2回全国メディカルコントロール協議会連絡会；JCS JCS2027－第91回日本循環器学会学術集会・APSC2027；JSEM 第30回日本臨床救急医学会総会・学術集会；JAEN 第29回日本救急看護学会学術集会JNST 第50回日本脳神経外傷学会JAAM-KANTO 第77回日本救急医学会関東地方会学術集会・第64回救急隊員学術研究会JSAEM 第63回日本腹部救急医学会総会JAAM-KINKI 第133回近畿救急医学研究会（日本救急医学会近畿地方会）JSS-STROKE STROKE 2027／第52回日本脳卒中学会学術集会・第56回日本脳卒中の外科学会学術集会・第43回SAH/スパズム・シンポジウム；CVIT 第35回日本心血管インターベンション治療学会学術集会（CVIT 2027）JADM 第32回日本災害医学会総会・学術集会；JAID-JSC 第101回日本感染症学会総会・学術講演会／第75回日本化学療法学会総会 合同学会；JSOA 日本スポーツ整形外科学会2027（JSOA2027）JSS 第41回日本Shock学会学術集会；JAEP 第35回日本精神科救急学会学術総会JSICM 第54回日本集中治療医学会学術集会JSBI 第53回日本熱傷学会総会・学術集会JSMED 2027年度 第47回 日本登山医学会学術集会JAST 第41回日本外傷学会総会・学術集会JAAM-CHUSHI 第43回日本救急医学会中国四国地方会JAAM-TOHOKU 第41回東北救急医学会総会・学術集会／第37回日本救急医学会東北地方会JSTH 第49回日本血栓止血学会学術集会JAAM-KYUSHU 第31回日本救急医学会九州地方会JABR 第39回日本脳死・脳蘇生学会総会・学術集会JAAM-KINKI 第134回近畿救急医学研究会（日本救急医学会近畿地方会）JRCM 第49回日本呼吸療法医学会学術集会JSEP 第40回日本小児救急医学会学術集会・第34回小児集中治療ワークショップJSCT 第49回日本中毒学会総会・学術集会JSBPCC 第38回日本急性血液浄化学会学術集会J-POCUS 第19回日本ポイントオブケア超音波学会学術集会JSDN 日本災害看護学会 第29回年次大会JAAM 第55回日本救急医学会総会・学術集会JHFS 第31回日本心不全学会学術集会HOKKAIDO-EM 第51回北海道救急医学会学術集会JSSM 第38回日本臨床スポーツ医学会学術集会JSELS 第13回日本救急救命学会学術集会JSAS 第34回（次回）日本航空医療学会総会WCICC 第20回世界集中治療医学会学術集会（WCICC2029）",
+      "sourceDescription": "日本急診與急性照護相關醫學會議地圖及每日官方來源監測"
+    },
+    {
+      "repo": "michelin-green-guide-japan-offline",
+      "repositoryId": 1471159276,
+      "curated": false,
+      "category": "life",
+      "title": "旅星簿｜日本景點離線探索",
+      "description": "Offline-friendly Japan Michelin Green Guide attraction explorer",
+      "url": "https://brianann2339.github.io/michelin-green-guide-japan-offline/",
+      "repository": "https://github.com/brianann2339/michelin-green-guide-japan-offline",
+      "status": 200,
+      "sourceTitle": "旅星簿｜日本景點離線探索",
+      "sourceDescription": "Offline-friendly Japan Michelin Green Guide attraction explorer"
     },
     {
       "repo": "btch-er-ccc.pages.dev",
