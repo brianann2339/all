@@ -1,6 +1,6 @@
 {
   "owner": "brianann2339",
-  "checkedAt": "2026-11-25T08:40:00+00:00",
+  "checkedAt": "2026-11-26T08:20:02+00:00",
   "sites": [
     {
       "repo": "dr_houyuehtseng",
@@ -353,6 +353,19 @@
       "status": 200,
       "sourceTitle": "急診戰情室",
       "sourceDescription": null
+    },
+    {
+      "repo": "taiwan-er-status.workers.dev",
+      "sync": "manual",
+      "curated": true,
+      "category": "medical",
+      "title": "全台急診即時資訊｜等待人數與 119 滿床通報",
+      "description": "每 5 分鐘檢查全台重度級急救責任醫院的候診、推床、住院、加護病床與 119 滿床通報狀態。",
+      "url": "https://taiwan-er-status.brianann75.workers.dev/emergency/",
+      "repository": null,
+      "status": 200,
+      "sourceTitle": "全台急診即時資訊｜等待人數與 119 滿床通報",
+      "sourceDescription": "每 5 分鐘檢查全台重度級急救責任醫院等待看診、推床、住院、加護病床人數與 119 滿床通報狀態。"
     }
   ]
 }
